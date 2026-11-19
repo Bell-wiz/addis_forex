@@ -1,0 +1,898 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Addis Forex Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F2;
+    --surface: #FFFFFF;
+    --surface-2: #E9EEE9;
+    --ink: #16201B;
+    --ink-2: #4C5C53;
+    --ink-3: #7B8A81;
+    --line: #D8E0D9;
+    --line-strong: #BCC8BE;
+    --accent: #12654A;
+    --accent-soft: #DCEBE2;
+    --best: #0B6E4F;
+    --best-soft: #D6EEDF;
+    --warn: #8A5A12;
+    --warn-soft: #F6EBD6;
+    --miss: #7B8A81;
+    --shadow: 0 1px 2px rgba(22,32,27,.06), 0 8px 24px -16px rgba(22,32,27,.28);
+    --r: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1512;
+      --surface: #151E1A;
+      --surface-2: #1D2924;
+      --ink: #E8EFE9;
+      --ink-2: #A9B8AF;
+      --ink-3: #7C8D83;
+      --line: #263330;
+      --line-strong: #35453F;
+      --accent: #5CC79B;
+      --accent-soft: #17332A;
+      --best: #6DD3A6;
+      --best-soft: #133029;
+      --warn: #D8A552;
+      --warn-soft: #2E2616;
+      --miss: #6B7A71;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1512;
+    --surface: #151E1A;
+    --surface-2: #1D2924;
+    --ink: #E8EFE9;
+    --ink-2: #A9B8AF;
+    --ink-3: #7C8D83;
+    --line: #263330;
+    --line-strong: #35453F;
+    --accent: #5CC79B;
+    --accent-soft: #17332A;
+    --best: #6DD3A6;
+    --best-soft: #133029;
+    --warn: #D8A552;
+    --warn-soft: #2E2616;
+    --miss: #6B7A71;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-inline: 16px;
+    padding-block: 20px 56px;
+  }
+  h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 600; letter-spacing: -.01em; }
+  .num { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+  .eyebrow {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--ink-3); font-weight: 600;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead {
+    display: flex; flex-wrap: wrap; gap: 16px 24px;
+    align-items: flex-end; justify-content: space-between;
+    padding-bottom: 16px; border-bottom: 2px solid var(--ink);
+  }
+  .masthead h1 { font-size: 27px; font-weight: 700; letter-spacing: -.02em; }
+  .masthead p { margin: 4px 0 0; color: var(--ink-2); font-size: 13.5px; max-width: 46ch; }
+  .stamp { text-align: right; }
+  .stamp .d { font-size: 15px; font-weight: 600; }
+  .stamp .t { font-size: 12px; color: var(--ink-3); }
+
+  /* ---------- benchmark strip ---------- */
+  .bench {
+    display: flex; flex-wrap: wrap; gap: 0;
+    border: 1px solid var(--line); border-radius: var(--r);
+    background: var(--surface); margin-top: 18px; overflow: hidden;
+  }
+  .bench > div {
+    flex: 1 1 150px; padding: 12px 14px;
+    border-right: 1px solid var(--line);
+  }
+  .bench > div:last-child { border-right: 0; }
+  .bench .v { font-size: 21px; font-weight: 600; margin-top: 2px; }
+  .bench .sub { font-size: 12px; color: var(--ink-3); }
+  .bench .who { font-size: 13px; color: var(--ink-2); margin-top: 1px; }
+
+  /* ---------- currency picker ---------- */
+  .ccy-bar {
+    display: flex; gap: 8px; margin: 22px 0 14px;
+    overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin;
+  }
+  .ccy {
+    flex: 0 0 auto; cursor: pointer;
+    border: 1px solid var(--line); background: var(--surface);
+    color: var(--ink-2); border-radius: 8px; padding: 7px 12px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    display: flex; align-items: baseline; gap: 7px;
+    transition: border-color .12s, background .12s, color .12s;
+  }
+  .ccy span.n { font-weight: 400; font-size: 12px; color: var(--ink-3); }
+  .ccy:hover { border-color: var(--line-strong); }
+  .ccy[aria-pressed="true"] {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  :root[data-theme="dark"] .ccy[aria-pressed="true"],
+  .ccy[aria-pressed="true"] span.n { color: inherit; }
+  .ccy[aria-pressed="true"] span.n { color: rgba(255,255,255,.72); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .ccy[aria-pressed="true"] { color: #08120E; }
+    :root:not([data-theme="light"]) .ccy[aria-pressed="true"] span.n { color: rgba(8,18,14,.66); }
+  }
+  :root[data-theme="dark"] .ccy[aria-pressed="true"] { color: #08120E; }
+  :root[data-theme="dark"] .ccy[aria-pressed="true"] span.n { color: rgba(8,18,14,.66); }
+
+  /* ---------- board ---------- */
+  .board-head {
+    display: flex; flex-wrap: wrap; gap: 10px 16px;
+    align-items: baseline; justify-content: space-between; margin-bottom: 10px;
+  }
+  .board-head h2 { font-size: 17px; }
+  .tools { display: flex; gap: 8px; flex-wrap: wrap; }
+  button.mini {
+    cursor: pointer; font-family: inherit; font-size: 12.5px; font-weight: 600;
+    border: 1px solid var(--line-strong); background: var(--surface);
+    color: var(--ink-2); border-radius: 7px; padding: 6px 10px;
+  }
+  button.mini:hover { color: var(--ink); border-color: var(--ink-3); }
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; min-width: 640px; }
+  thead th {
+    text-align: right; font-size: 11px; text-transform: uppercase; letter-spacing: .07em;
+    color: var(--ink-3); font-weight: 600; padding: 11px 14px;
+    border-bottom: 1px solid var(--line-strong); white-space: nowrap;
+    background: var(--surface-2);
+  }
+  thead th:first-child { text-align: left; }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: right; vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody td:first-child { text-align: left; }
+  tbody tr.quiet td { color: var(--miss); }
+  tbody tr:hover td { background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+
+  .bname { font-weight: 600; font-size: 14.5px; display: block; white-space: nowrap; }
+  .bmeta { font-size: 11.5px; color: var(--ink-3); }
+  .rate { font-size: 15.5px; font-weight: 500; }
+  .chip {
+    display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em;
+    text-transform: uppercase; padding: 2px 6px; border-radius: 5px;
+    background: var(--best-soft); color: var(--best); margin-left: 7px; vertical-align: 1px;
+  }
+  .prem { font-size: 13px; }
+  .prem.pos { color: var(--best); }
+  .bar-cell { width: 130px; }
+  .bar { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+  .src { font-size: 11.5px; color: var(--ink-3); white-space: nowrap; }
+  .dash { color: var(--miss); }
+
+  /* ---------- history ---------- */
+  .panel {
+    margin-top: 26px; border: 1px solid var(--line); border-radius: var(--r);
+    background: var(--surface); padding: 16px; box-shadow: var(--shadow);
+  }
+  .panel > h2 { font-size: 16px; margin-bottom: 2px; }
+  .panel > p.lede { margin: 2px 0 14px; color: var(--ink-2); font-size: 13px; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin-bottom: 8px; }
+  .legend i { display: inline-block; width: 16px; height: 2px; vertical-align: 4px; margin-right: 6px; }
+  .empty-note { font-size: 13px; color: var(--ink-3); padding: 18px 0; }
+
+  /* ---------- admin ---------- */
+  details.admin { margin-top: 26px; }
+  details.admin > summary {
+    cursor: pointer; list-style: none; display: flex; align-items: center; gap: 9px;
+    font-weight: 600; font-size: 14px; padding: 12px 14px;
+    border: 1px dashed var(--line-strong); border-radius: var(--r);
+    background: var(--surface); color: var(--ink);
+  }
+  details.admin > summary::-webkit-details-marker { display: none; }
+  details.admin > summary::before { content: "＋"; color: var(--accent); font-size: 15px; }
+  details.admin[open] > summary::before { content: "－"; }
+  details.admin > summary .hint { font-weight: 400; color: var(--ink-3); font-size: 12.5px; margin-left: auto; }
+  .admin-body {
+    border: 1px solid var(--line); border-top: 0;
+    border-radius: 0 0 var(--r) var(--r); background: var(--surface);
+    padding: 16px; margin-top: -6px;
+  }
+  .field-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; flex: 1 1 180px; }
+  .field label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; }
+  select, input[type="text"], input[type="date"], input[type="number"] {
+    font-family: inherit; font-size: 14px; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line-strong);
+    border-radius: 7px; padding: 8px 10px; width: 100%;
+  }
+  input.num-in { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .grid-rates { display: grid; grid-template-columns: 72px 1fr 1fr; gap: 8px 10px; align-items: center; }
+  .grid-rates .gh { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; }
+  .grid-rates .code { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 13px; }
+  .actions { display: flex; gap: 10px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+  button.primary {
+    cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 600;
+    background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 10px 18px;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) button.primary { color: #08120E; } }
+  :root[data-theme="dark"] button.primary { color: #08120E; }
+  button.primary:disabled { opacity: .5; cursor: not-allowed; }
+  .status { font-size: 13px; color: var(--ink-2); }
+  .status.bad { color: var(--warn); }
+
+  /* ---------- directory ---------- */
+  .silent {
+    margin-top: 12px; border: 1px dashed var(--line-strong); border-radius: var(--r);
+    background: var(--surface); padding: 12px 14px;
+  }
+  .silent .eyebrow { display: block; margin-bottom: 8px; }
+  .silent ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .silent li {
+    font-size: 12.5px; color: var(--ink-2); background: var(--surface-2);
+    border-radius: 6px; padding: 4px 9px; white-space: nowrap;
+  }
+  .silent li b { font-weight: 600; color: var(--ink); }
+  .silent li span { font-family: "IBM Plex Mono", monospace; color: var(--ink-3); margin-left: 6px; font-size: 11.5px; }
+
+  .dir { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+  .dir > div { background: var(--surface); padding: 12px 14px; }
+  .dir .n { font-weight: 600; font-size: 14px; }
+  .dir .l { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+  .dir a { color: var(--accent); text-decoration: none; font-size: 12.5px; }
+  .dir a:hover { text-decoration: underline; }
+
+  footer.note { margin-top: 30px; font-size: 12px; color: var(--ink-3); line-height: 1.7; }
+  footer.note strong { color: var(--ink-2); font-weight: 600; }
+
+  @media (max-width: 560px) {
+    .masthead { align-items: flex-start; }
+    .stamp { text-align: left; }
+    .masthead h1 { font-size: 23px; }
+    .bench > div { flex-basis: 50%; border-bottom: 1px solid var(--line); }
+    .grid-rates { grid-template-columns: 56px 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div>
+      <h1>Addis Forex Board</h1>
+      <p>Cash buying and selling rates at Ethiopia&rsquo;s licensed independent forex bureaus, against the National Bank&rsquo;s daily indicative rate.</p>
+    </div>
+    <div class="stamp">
+      <div class="eyebrow">Board date</div>
+      <div class="d num" id="stampDate">&mdash;</div>
+      <div class="t" id="stampCount">loading&hellip;</div>
+    </div>
+  </header>
+
+  <section class="bench" id="bench" aria-label="Summary"></section>
+
+  <div class="ccy-bar" id="ccyBar" role="group" aria-label="Currency"></div>
+
+  <div class="board-head">
+    <h2 id="boardTitle">Bureau rates</h2>
+    <div class="tools">
+      <button class="mini" id="btnSort" type="button">Sort: best buying</button>
+      <button class="mini" id="btnCopy" type="button">Copy board</button>
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Bureau</th>
+          <th scope="col">Buying</th>
+          <th scope="col">Selling</th>
+          <th scope="col">Spread</th>
+          <th scope="col">vs NBE</th>
+          <th scope="col" class="bar-cell">Buying, scaled</th>
+          <th scope="col">Updated</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="silent" id="silent" hidden>
+    <span class="eyebrow" id="silentHead">Not quoting today</span>
+    <ul id="silentList"></ul>
+  </div>
+
+  <section class="panel" id="histPanel">
+    <h2>Best buying rate over time</h2>
+    <p class="lede" id="histLede">How the top bureau bid compares with the NBE indicative rate.</p>
+    <div class="legend">
+      <span><i style="background: var(--accent)"></i>Best bureau buying</span>
+      <span><i style="background: var(--ink-3)"></i>NBE indicative</span>
+    </div>
+    <div id="histBody"></div>
+  </section>
+
+  <details class="admin" id="adminWrap" hidden>
+    <summary>Enter rates<span class="hint" id="adminHint">for bureaus that don&rsquo;t publish online</span></summary>
+    <div class="admin-body">
+      <div class="field-row">
+        <div class="field">
+          <label for="adBureau">Bureau</label>
+          <select id="adBureau"></select>
+        </div>
+        <div class="field">
+          <label for="adDate">Date</label>
+          <input type="date" id="adDate">
+        </div>
+        <div class="field">
+          <label for="adSource">Where it came from</label>
+          <input type="text" id="adSource" placeholder="Phone call, Telegram, branch board&hellip;">
+        </div>
+      </div>
+      <div class="grid-rates" id="adGrid"></div>
+      <div class="actions">
+        <button class="primary" id="adSave" type="button">Save rates</button>
+        <span class="status" id="adStatus"></span>
+      </div>
+    </div>
+  </details>
+
+  <section class="panel">
+    <h2>The fifteen licensed bureaus</h2>
+    <p class="lede">Independent forex bureaus on the National Bank of Ethiopia register, with the licence number each one trades under.</p>
+    <div class="dir" id="dir"></div>
+  </section>
+
+  <footer class="note">
+    <strong>Reading the board.</strong> Buying is what the bureau pays you for foreign cash; selling is what it charges you. Rates are per one unit of currency, in birr. Some bureaus quote a selling rate that excludes a service fee of up to 2 percent &mdash; confirm the all-in figure at the counter before you transact.<br>
+    <strong>Sources.</strong> Bureau rates are read from each bureau&rsquo;s own published board where it has one, and entered by hand otherwise. The NBE indicative rate is the weighted average of the previous business day&rsquo;s interbank transactions and is a reference, not a price anyone is obliged to offer.
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CURRENCIES = [
+    { code: "USD", name: "US Dollar" },
+    { code: "EUR", name: "Euro" },
+    { code: "GBP", name: "Pound" },
+    { code: "AED", name: "Dirham" },
+    { code: "SAR", name: "Riyal" },
+    { code: "CAD", name: "Can. Dollar" },
+    { code: "CHF", name: "Franc" },
+    { code: "CNY", name: "Yuan" }
+  ];
+
+  // Public register data (National Bank of Ethiopia, Independent Forex Bureaus).
+  var BUREAUS = [
+    { slug: "ammann",  name: "Ammann Forex Bureau",        lic: "AMT/IFB/10/2024", phone: "0911-22-01-98", site: "ammannforexbureau.com" },
+    { slug: "ayotan",  name: "AYOTAN Forex Bureau",        lic: "AYT/IFB/09/2024", phone: "0930-25-12-36", site: "" },
+    { slug: "dbh",     name: "DBH Forex Bureau",           lic: "DBH/IFB/06/2024", phone: "0913-06-48-30", site: "dbhforex.com" },
+    { slug: "ethio",   name: "Ethio Forex Bureau",         lic: "EFT/IFB/02/2024", phone: "0911-23-39-88", site: "" },
+    { slug: "fourx",   name: "FOUR X Forex Bureau",        lic: "DFI/IFB/03/2024", phone: "0974-55-49-50", site: "" },
+    { slug: "global",  name: "Global Forex Bureau",        lic: "AAA/IFB/04/2024", phone: "0911-22-32-68", site: "" },
+    { slug: "grace",   name: "Grace General Forex Bureau", lic: "GGT/IFB/14/2026", phone: "0969-78-78-78", site: "" },
+    { slug: "haron",   name: "Haron Forex Bureau",         lic: "HCO/IFB/12/2024", phone: "0911-20-72-82", site: "haronforex.com" },
+    { slug: "robust",  name: "Robust Forex Bureau",        lic: "RBG/IFB/01/2024", phone: "0911-24-68-47", site: "" },
+    { slug: "rooha",   name: "Rooha Forex Bureau",         lic: "RFT/IFB/07/2024", phone: "0915-99-00-07", site: "roohaforex.net" },
+    { slug: "sheba",   name: "Sheba Forex Bureau",         lic: "SFB/IFB/11/2024", phone: "0911-21-39-40", site: "" },
+    { slug: "sibrat",  name: "Sibrat Forex Bureau",        lic: "SIT/IFB/08/2024", phone: "0917-55-16-11", site: "" },
+    { slug: "taypay",  name: "Taypay Forex Bureau",        lic: "TFT/IFB/13/2024", phone: "0915-75-20-67", site: "" },
+    { slug: "walia",   name: "Walia Forex Bureau",         lic: "WFT/IFB/16/2026", phone: "0967-21-77-77", site: "" },
+    { slug: "yoga",    name: "Yoga Forex Bureau",          lic: "YOT/IFB/05/2024", phone: "0982-77-77-70", site: "" }
+  ];
+  var BY_SLUG = {};
+  BUREAUS.forEach(function (b) { BY_SLUG[b.slug] = b; });
+
+  var state = {
+    ccy: "USD",
+    sort: "buy",          // "buy" | "sell" | "name"
+    days: [],             // [{date, nbe:{}, quotes:{slug:{rates,source,updatedAt}}}] newest first
+    day: null,
+    db: null,
+    canWrite: null
+  };
+
+  // ---------- helpers ----------
+  function todayISO() {
+    var d = new Date();
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  }
+  function fmt(n, dp) {
+    if (n === null || n === undefined || isNaN(n)) return null;
+    return Number(n).toLocaleString("en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  }
+  function prettyDate(iso) {
+    if (!iso) return "—";
+    var p = iso.split("-");
+    var d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+    return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  }
+  function shortTime(ts) {
+    if (!ts) return "—";
+    var d = new Date(ts);
+    if (isNaN(d.getTime())) return String(ts);
+    return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined && text !== null) e.textContent = text;
+    return e;
+  }
+
+  function quotesFor(day, ccy) {
+    var out = [];
+    if (!day || !day.quotes) return out;
+    BUREAUS.forEach(function (b) {
+      var q = day.quotes[b.slug];
+      var r = q && q.rates ? q.rates[ccy] : null;
+      out.push({
+        slug: b.slug,
+        name: b.name,
+        lic: b.lic,
+        buy: r && typeof r.buy === "number" ? r.buy : null,
+        sell: r && typeof r.sell === "number" ? r.sell : null,
+        source: q ? q.source : null,
+        updatedAt: q ? q.updatedAt : null
+      });
+    });
+    return out;
+  }
+
+  // ---------- render: currency bar ----------
+  function renderCcy() {
+    var bar = document.getElementById("ccyBar");
+    bar.textContent = "";
+    CURRENCIES.forEach(function (c) {
+      var b = el("button", "ccy");
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(c.code === state.ccy));
+      var code = el("strong", "num", c.code);
+      var nm = el("span", "n", c.name);
+      b.appendChild(code); b.appendChild(nm);
+      b.addEventListener("click", function () { state.ccy = c.code; renderAll(); });
+      bar.appendChild(b);
+    });
+  }
+
+  // ---------- render: benchmark strip ----------
+  function renderBench() {
+    var host = document.getElementById("bench");
+    host.textContent = "";
+    var day = state.day;
+    var rows = quotesFor(day, state.ccy).filter(function (q) { return q.buy !== null; });
+    var nbe = day && day.nbe ? day.nbe[state.ccy] : null;
+
+    var bestBuy = null, bestSell = null;
+    rows.forEach(function (q) {
+      if (bestBuy === null || q.buy > bestBuy.buy) bestBuy = q;
+      if (q.sell !== null && (bestSell === null || q.sell < bestSell.sell)) bestSell = q;
+    });
+
+    function tile(label, value, who, sub) {
+      var d = el("div");
+      d.appendChild(el("div", "eyebrow", label));
+      d.appendChild(el("div", "v num", value));
+      if (who) d.appendChild(el("div", "who", who));
+      if (sub) d.appendChild(el("div", "sub", sub));
+      host.appendChild(d);
+    }
+
+    tile("NBE indicative", nbe ? fmt(nbe, 4) : "—", null, "birr per " + state.ccy);
+    tile("Best buying", bestBuy ? fmt(bestBuy.buy, 2) : "—",
+         bestBuy ? bestBuy.name.replace(" Forex Bureau", "") : "no quotes yet",
+         bestBuy && nbe ? "+" + ((bestBuy.buy - nbe) / nbe * 100).toFixed(1) + "% over NBE" : "");
+    tile("Cheapest selling", bestSell ? fmt(bestSell.sell, 2) : "—",
+         bestSell ? bestSell.name.replace(" Forex Bureau", "") : "no quotes yet",
+         bestSell && bestSell.buy !== null
+           ? "own spread " + fmt(bestSell.sell - bestSell.buy, 2) + " birr" : "");
+    tile("Reporting today", rows.length + " / 15", null, "licensed bureaus");
+
+    document.getElementById("stampDate").textContent = prettyDate(day ? day.date : null);
+    document.getElementById("stampCount").textContent = day
+      ? rows.length + " of 15 bureaus quoting " + state.ccy
+      : "waiting for data";
+    document.getElementById("boardTitle").textContent =
+      state.ccy + " — birr per unit";
+  }
+
+  // ---------- render: table ----------
+  function renderTable() {
+    var tb = document.getElementById("tbody");
+    tb.textContent = "";
+    var rows = quotesFor(state.day, state.ccy);
+    var nbe = state.day && state.day.nbe ? state.day.nbe[state.ccy] : null;
+
+    var quoted = rows.filter(function (r) { return r.buy !== null; });
+    var silent = rows.filter(function (r) { return r.buy === null; });
+
+    if (state.sort === "buy") quoted.sort(function (a, b) { return b.buy - a.buy; });
+    else if (state.sort === "sell") quoted.sort(function (a, b) { return (a.sell === null ? Infinity : a.sell) - (b.sell === null ? Infinity : b.sell); });
+    else quoted.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    silent.sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+    var buys = quoted.map(function (r) { return r.buy; });
+    var lo = buys.length ? Math.min.apply(null, buys) : 0;
+    var hi = buys.length ? Math.max.apply(null, buys) : 1;
+    var span = (hi - lo) || 1;
+    var topBuy = buys.length ? hi : null;
+    var sells = quoted.map(function (r) { return r.sell; }).filter(function (v) { return v !== null; });
+    var bestSell = sells.length ? Math.min.apply(null, sells) : null;
+
+    // Bureaus with no quote get a compact strip below, not empty table rows.
+    var silentBox = document.getElementById("silent");
+    var silentList = document.getElementById("silentList");
+    silentList.textContent = "";
+    silentBox.hidden = silent.length === 0;
+    document.getElementById("silentHead").textContent =
+      "Not quoting " + state.ccy + " today — call to ask";
+    silent.forEach(function (r) {
+      var li = el("li");
+      li.appendChild(el("b", null, r.name.replace(" Forex Bureau", "")));
+      li.appendChild(el("span", null, BY_SLUG[r.slug].phone));
+      silentList.appendChild(li);
+    });
+
+    quoted.forEach(function (r) {
+      var tr = el("tr");
+
+      var td1 = el("td");
+      td1.appendChild(el("span", "bname", r.name));
+      td1.appendChild(el("span", "bmeta", r.lic));
+      tr.appendChild(td1);
+
+      // buying
+      var td2 = el("td");
+      if (r.buy === null) { td2.appendChild(el("span", "dash", "—")); }
+      else {
+        td2.appendChild(el("span", "rate num", fmt(r.buy, 2)));
+        if (r.buy === topBuy) td2.appendChild(el("span", "chip", "best"));
+      }
+      tr.appendChild(td2);
+
+      // selling
+      var td3 = el("td");
+      if (r.sell === null) { td3.appendChild(el("span", "dash", "—")); }
+      else {
+        td3.appendChild(el("span", "rate num", fmt(r.sell, 2)));
+        if (r.sell === bestSell) td3.appendChild(el("span", "chip", "low"));
+      }
+      tr.appendChild(td3);
+
+      // spread
+      var td4 = el("td", "num");
+      td4.textContent = (r.buy !== null && r.sell !== null) ? fmt(r.sell - r.buy, 2) : "—";
+      tr.appendChild(td4);
+
+      // premium vs NBE
+      var td5 = el("td");
+      if (r.buy !== null && nbe) {
+        var pct = (r.buy - nbe) / nbe * 100;
+        var s = el("span", "prem num" + (pct > 0 ? " pos" : ""), (pct > 0 ? "+" : "") + pct.toFixed(1) + "%");
+        td5.appendChild(s);
+      } else td5.appendChild(el("span", "dash", "—"));
+      tr.appendChild(td5);
+
+      // scaled bar
+      var td6 = el("td", "bar-cell");
+      if (r.buy !== null) {
+        var bar = el("div", "bar");
+        var i = el("i");
+        var pctw = buys.length > 1 ? 12 + ((r.buy - lo) / span) * 88 : 100;
+        i.style.width = pctw.toFixed(1) + "%";
+        bar.appendChild(i);
+        td6.appendChild(bar);
+      }
+      tr.appendChild(td6);
+
+      // updated
+      var td7 = el("td");
+      var u = el("span", "src");
+      u.textContent = r.buy === null ? "no quote" : (r.source || "—");
+      td7.appendChild(u);
+      tr.appendChild(td7);
+
+      tb.appendChild(tr);
+    });
+
+    if (!quoted.length) {
+      var tr0 = el("tr");
+      var td0 = el("td");
+      td0.colSpan = 7;
+      td0.className = "empty-note";
+      td0.style.textAlign = "left";
+      td0.textContent = "No bureau has quoted " + state.ccy + " for this date yet.";
+      tr0.appendChild(td0);
+      tb.appendChild(tr0);
+    }
+  }
+
+  // ---------- render: history ----------
+  function renderHistory() {
+    var host = document.getElementById("histBody");
+    host.textContent = "";
+    var series = state.days.slice().reverse().map(function (d) {
+      var qs = quotesFor(d, state.ccy).filter(function (q) { return q.buy !== null; });
+      var best = qs.length ? Math.max.apply(null, qs.map(function (q) { return q.buy; })) : null;
+      return { date: d.date, best: best, nbe: d.nbe ? d.nbe[state.ccy] : null };
+    }).filter(function (p) { return p.best !== null || p.nbe !== null; });
+
+    document.getElementById("histLede").textContent =
+      "How the top bureau bid for " + state.ccy + " compares with the NBE indicative rate.";
+
+    if (series.length < 2) {
+      var n = el("div", "empty-note",
+        "One day on the board so far. The line starts drawing itself once a second day of rates is in — today’s figures are already saved.");
+      host.appendChild(n);
+      return;
+    }
+
+    var W = 720, H = 210, PL = 54, PR = 16, PT = 14, PB = 28;
+    var vals = [];
+    series.forEach(function (p) { if (p.best !== null) vals.push(p.best); if (p.nbe !== null) vals.push(p.nbe); });
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    var pad = (hi - lo) * 0.12 || 1;
+    lo -= pad; hi += pad;
+    function X(i) { return PL + (series.length === 1 ? 0 : i * (W - PL - PR) / (series.length - 1)); }
+    function Y(v) { return PT + (1 - (v - lo) / (hi - lo)) * (H - PT - PB); }
+
+    var ns = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    svg.setAttribute("width", "100%");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "Best bureau buying rate against the NBE indicative rate");
+    svg.style.maxWidth = "100%";
+    svg.style.display = "block";
+
+    var ticks = 4;
+    for (var t = 0; t <= ticks; t++) {
+      var v = lo + (hi - lo) * t / ticks;
+      var y = Y(v);
+      var ln = document.createElementNS(ns, "line");
+      ln.setAttribute("x1", PL); ln.setAttribute("x2", W - PR);
+      ln.setAttribute("y1", y); ln.setAttribute("y2", y);
+      ln.setAttribute("stroke", "currentColor");
+      ln.setAttribute("stroke-opacity", ".12");
+      svg.appendChild(ln);
+      var lb = document.createElementNS(ns, "text");
+      lb.setAttribute("x", PL - 8); lb.setAttribute("y", y + 4);
+      lb.setAttribute("text-anchor", "end");
+      lb.setAttribute("font-size", "11");
+      lb.setAttribute("font-family", "IBM Plex Mono, monospace");
+      lb.setAttribute("fill", "currentColor");
+      lb.setAttribute("fill-opacity", ".55");
+      lb.textContent = v.toFixed(0);
+      svg.appendChild(lb);
+    }
+
+    function line(key, stroke, dash) {
+      var pts = [];
+      series.forEach(function (p, i) { if (p[key] !== null) pts.push(X(i) + "," + Y(p[key])); });
+      if (pts.length < 2) return;
+      var pl = document.createElementNS(ns, "polyline");
+      pl.setAttribute("points", pts.join(" "));
+      pl.setAttribute("fill", "none");
+      pl.setAttribute("stroke", stroke);
+      pl.setAttribute("stroke-width", "2");
+      pl.setAttribute("stroke-linejoin", "round");
+      pl.setAttribute("stroke-linecap", "round");
+      if (dash) pl.setAttribute("stroke-dasharray", dash);
+      svg.appendChild(pl);
+      var last = series.filter(function (p) { return p[key] !== null; }).pop();
+      var li = series.indexOf(last);
+      var c = document.createElementNS(ns, "circle");
+      c.setAttribute("cx", X(li)); c.setAttribute("cy", Y(last[key]));
+      c.setAttribute("r", "3.5"); c.setAttribute("fill", stroke);
+      svg.appendChild(c);
+    }
+    var cs = getComputedStyle(document.body);
+    line("nbe", cs.getPropertyValue("--ink-3").trim() || "#888", "4 4");
+    line("best", cs.getPropertyValue("--accent").trim() || "#12654A", null);
+
+    series.forEach(function (p, i) {
+      if (series.length > 8 && i % 2) return;
+      var tx = document.createElementNS(ns, "text");
+      tx.setAttribute("x", X(i)); tx.setAttribute("y", H - 8);
+      tx.setAttribute("text-anchor", i === 0 ? "start" : (i === series.length - 1 ? "end" : "middle"));
+      tx.setAttribute("font-size", "11");
+      tx.setAttribute("font-family", "IBM Plex Mono, monospace");
+      tx.setAttribute("fill", "currentColor");
+      tx.setAttribute("fill-opacity", ".55");
+      tx.textContent = p.date.slice(5);
+      svg.appendChild(tx);
+    });
+
+    host.appendChild(svg);
+  }
+
+  // ---------- render: directory ----------
+  function renderDir() {
+    var host = document.getElementById("dir");
+    if (host.childElementCount) return;
+    BUREAUS.forEach(function (b) {
+      var d = el("div");
+      d.appendChild(el("div", "n", b.name));
+      d.appendChild(el("div", "l", b.lic + " · " + b.phone));
+      if (b.site) {
+        var a = el("a", null, b.site);
+        a.href = "https://" + b.site;
+        a.target = "_blank"; a.rel = "noopener";
+        d.appendChild(a);
+      }
+      host.appendChild(d);
+    });
+  }
+
+  function renderAll() {
+    renderCcy();
+    renderBench();
+    renderTable();
+    renderHistory();
+    renderDir();
+  }
+
+  // ---------- copy board ----------
+  document.getElementById("btnCopy").addEventListener("click", function () {
+    var day = state.day;
+    var rows = quotesFor(day, state.ccy).filter(function (q) { return q.buy !== null; })
+      .sort(function (a, b) { return b.buy - a.buy; });
+    var lines = ["Addis Forex Board — " + state.ccy + " — " + prettyDate(day ? day.date : null)];
+    var nbe = day && day.nbe ? day.nbe[state.ccy] : null;
+    if (nbe) lines.push("NBE indicative: " + fmt(nbe, 4));
+    lines.push("");
+    rows.forEach(function (r) {
+      lines.push(r.name.replace(" Forex Bureau", "") + "  buy " + fmt(r.buy, 2) + "  sell " + (r.sell !== null ? fmt(r.sell, 2) : "-"));
+    });
+    var txt = lines.join("\n");
+    var btn = this;
+    function done(ok) { btn.textContent = ok ? "Copied" : "Copy failed"; setTimeout(function () { btn.textContent = "Copy board"; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { done(true); }, function () { done(false); });
+    } else { done(false); }
+  });
+
+  document.getElementById("btnSort").addEventListener("click", function () {
+    state.sort = state.sort === "buy" ? "sell" : (state.sort === "sell" ? "name" : "buy");
+    this.textContent = "Sort: " + (state.sort === "buy" ? "best buying" : state.sort === "sell" ? "cheapest selling" : "bureau name");
+    renderTable();
+  });
+
+  // ---------- admin form ----------
+  function buildAdmin() {
+    var sel = document.getElementById("adBureau");
+    BUREAUS.forEach(function (b) {
+      var o = document.createElement("option");
+      o.value = b.slug; o.textContent = b.name;
+      sel.appendChild(o);
+    });
+    document.getElementById("adDate").value = todayISO();
+
+    var grid = document.getElementById("adGrid");
+    grid.appendChild(el("div", "gh", "Ccy"));
+    grid.appendChild(el("div", "gh", "Buying"));
+    grid.appendChild(el("div", "gh", "Selling"));
+    CURRENCIES.forEach(function (c) {
+      grid.appendChild(el("div", "code", c.code));
+      ["buy", "sell"].forEach(function (k) {
+        var inp = document.createElement("input");
+        inp.type = "number"; inp.step = "0.0001"; inp.min = "0";
+        inp.className = "num-in";
+        inp.id = "ad_" + c.code + "_" + k;
+        inp.placeholder = "—";
+        inp.setAttribute("aria-label", c.code + " " + k);
+        grid.appendChild(inp);
+      });
+    });
+
+    function loadExisting() {
+      var slug = sel.value, date = document.getElementById("adDate").value;
+      var day = state.days.filter(function (d) { return d.date === date; })[0];
+      var q = day && day.quotes ? day.quotes[slug] : null;
+      CURRENCIES.forEach(function (c) {
+        var r = q && q.rates ? q.rates[c.code] : null;
+        document.getElementById("ad_" + c.code + "_buy").value = r && typeof r.buy === "number" ? r.buy : "";
+        document.getElementById("ad_" + c.code + "_sell").value = r && typeof r.sell === "number" ? r.sell : "";
+      });
+      document.getElementById("adSource").value = q && q.source ? q.source : "";
+    }
+    sel.addEventListener("change", loadExisting);
+    document.getElementById("adDate").addEventListener("change", loadExisting);
+    state.reloadAdmin = loadExisting;
+    loadExisting();
+
+    document.getElementById("adSave").addEventListener("click", saveRates);
+  }
+
+  function setStatus(msg, bad) {
+    var s = document.getElementById("adStatus");
+    s.textContent = msg;
+    s.className = "status" + (bad ? " bad" : "");
+  }
+
+  function saveRates() {
+    if (!state.db) { setStatus("Saving isn’t available in this view.", true); return; }
+    var slug = document.getElementById("adBureau").value;
+    var date = document.getElementById("adDate").value;
+    if (!date) { setStatus("Pick a date first.", true); return; }
+
+    var rates = {}, any = false;
+    CURRENCIES.forEach(function (c) {
+      var b = parseFloat(document.getElementById("ad_" + c.code + "_buy").value);
+      var s = parseFloat(document.getElementById("ad_" + c.code + "_sell").value);
+      var o = {};
+      if (!isNaN(b) && b > 0) { o.buy = b; any = true; }
+      if (!isNaN(s) && s > 0) { o.sell = s; any = true; }
+      if (Object.keys(o).length) rates[c.code] = o;
+    });
+    if (!any) { setStatus("Enter at least one rate.", true); return; }
+
+    var btn = document.getElementById("adSave");
+    btn.disabled = true;
+    setStatus("Saving…");
+
+    var ref = state.db.doc("days/" + date);
+    ref.get().then(function (snap) {
+      var body = snap.exists ? JSON.parse(JSON.stringify(snap.data())) : { date: date, nbe: {}, quotes: {} };
+      if (!body.quotes) body.quotes = {};
+      body.date = date;
+      body.quotes[slug] = {
+        rates: rates,
+        source: document.getElementById("adSource").value.trim() || "entered by hand",
+        updatedAt: new Date().toISOString()
+      };
+      return ref.set(body);
+    }).then(function () {
+      btn.disabled = false;
+      setStatus("Saved " + BY_SLUG[slug].name + " for " + date + ".");
+    }).catch(function (e) {
+      btn.disabled = false;
+      var code = e && e.code;
+      if (code === "invalid_argument" || code === "not_granted") {
+        setStatus("You have view-only access to this board, so rates can’t be saved from here.", true);
+        document.getElementById("adSave").disabled = true;
+      } else {
+        setStatus("Couldn’t save — " + (code || "unknown error") + ". Try again in a moment.", true);
+      }
+    });
+  }
+
+  // ---------- boot ----------
+  renderAll();
+  buildAdmin();
+
+  // ---------- static data (rates.json next to this page; embedded copy as fallback) ----------
+  var EMBEDDED = {"days":[{"date":"2026-11-19","nbe":{"AED":44.1094,"CAD":113.1871,"CHF":192.2448,"CNY":24.2948,"EUR":177.6868,"GBP":213.263,"SAR":43.1829,"USD":161.1987},"nbeSource":"NBE daily indicative rates for 19 Nov 2026 (weighted average), as republished by bina.et and Addis Fortune's exchange page; nbe.gov.et table not machine-readable","quotes":{"ammann":{"rates":{"AED":{"buy":49.2,"sell":50.184},"CAD":{"buy":124,"sell":126.48},"CHF":{"buy":214,"sell":218.28},"CNY":{"buy":26,"sell":26.52},"EUR":{"buy":199,"sell":202.98},"GBP":{"buy":238,"sell":242.76},"SAR":{"buy":48,"sell":48.96},"USD":{"buy":181,"sell":184.62}},"source":"ammannforexbureau.com, Beherawi branch (read 19 Nov; site shows no date)","updatedAt":"2026-11-19T10:45:00+03:00"},"dbh":{"rates":{"AED":{"buy":49.1611,"sell":50.1443},"CAD":{"buy":122.1201,"sell":124.5625},"CHF":{"buy":214.7501,"sell":219.0451},"CNY":{"buy":26.0501,"sell":26.5711},"EUR":{"buy":200.1525,"sell":204.1556},"GBP":{"buy":231.6101,"sell":236.2423},"SAR":{"buy":47.6311,"sell":48.5837},"USD":{"buy":180.3511,"sell":183.9581}},"source":"dbhforex.com, Main branch (site: last updated 19 Nov)","updatedAt":"2026-11-19T10:47:00+03:00"},"ethio":{"rates":{"AED":{"buy":49.2053,"sell":50.1402},"CAD":{"buy":124.5,"sell":126.8655},"CHF":{"buy":212.0976,"sell":216.1275},"CNY":{"buy":26.4897,"sell":26.993},"EUR":{"buy":198,"sell":201.564},"GBP":{"buy":237,"sell":241.503},"SAR":{"buy":48.0675,"sell":48.9808},"USD":{"buy":180,"sell":183.24}},"source":"@Ethioforexrate on X (rate card, 19 Nov 7:24 AM)","updatedAt":"2026-11-19T07:24:00+03:00"},"global":{"rates":{"AED":{"buy":49.25,"sell":50.235},"CAD":{"buy":123.5,"sell":125.97},"CHF":{"buy":212,"sell":216.24},"CNY":{"buy":26,"sell":26.52},"GBP":{"buy":237,"sell":241.74},"SAR":{"buy":48,"sell":48.96},"USD":{"buy":181,"sell":184.62}},"source":"globalforexet.com (applicable 19 Nov; selling excl. 2% fee + VAT)","updatedAt":"2026-11-19T11:00:00+03:00"},"haron":{"rates":{"AED":{"buy":49.5,"sell":50.49},"CAD":{"buy":124,"sell":126.48},"CHF":{"buy":216,"sell":220.32},"CNY":{"buy":26,"sell":26.52},"EUR":{"buy":197.75,"sell":201.705},"GBP":{"buy":237,"sell":241.74},"SAR":{"buy":47.5,"sell":48.45},"USD":{"buy":179.75,"sell":183.345}},"source":"haronforex.com (STALE: last updated 17 Nov 10:01)","updatedAt":"2026-11-17T10:01:49+03:00"},"rooha":{"rates":{"AED":{"buy":49.28,"sell":50.2656},"CAD":{"buy":124.27,"sell":126.7554},"CHF":{"buy":212.55,"sell":216.801},"CNY":{"buy":26.31,"sell":26.8362},"EUR":{"buy":199.31,"sell":203.2962},"GBP":{"buy":237.22,"sell":241.9644},"SAR":{"buy":48.11,"sell":49.0722},"USD":{"buy":181.03,"sell":184.6506}},"source":"roohaforex.net (applicable 19 Nov; selling excl. 0.5% fee)","updatedAt":"2026-11-19T10:50:00+03:00"},"taypay":{"rates":{"AED":{"buy":48.9999,"sell":49.9799},"CHF":{"buy":216.9999,"sell":221.3399},"CNY":{"buy":25.9999,"sell":26.5199},"EUR":{"buy":198.9999,"sell":202.9799},"GBP":{"buy":234.9999,"sell":239.6999},"SAR":{"buy":46.9999,"sell":47.9399},"USD":{"buy":180.9998,"sell":184.6198}},"source":"taypayforexbureau.com (dated 19 Nov)","updatedAt":"2026-11-19T10:52:00+03:00"}}},{"date":"2026-09-22","nbe":{"AED":43.9922,"CAD":115.8956,"CHF":197.2291,"CNY":24.088,"EUR":186.371,"GBP":217.3602,"SAR":43.0142,"USD":160.7662},"nbeSource":"NBE daily indicative rates","quotes":{"ammann":{"rates":{"AED":{"buy":48.5,"sell":49.47},"CAD":{"buy":123,"sell":125.46},"CHF":{"buy":217,"sell":221.34},"CNY":{"buy":26,"sell":26.52},"EUR":{"buy":206,"sell":210.12},"GBP":{"buy":237,"sell":241.74},"SAR":{"buy":47,"sell":47.94},"USD":{"buy":183.5,"sell":187.17}},"source":"ammannforexbureau.com (Beherawi branch)","updatedAt":"2026-09-22T15:05:00+03:00"},"dbh":{"rates":{"AED":{"buy":47.23,"sell":48.18},"CAD":{"buy":113.01,"sell":115.27},"CHF":{"buy":209.1,"sell":213.28},"CNY":{"buy":23.38,"sell":23.85},"EUR":{"buy":198.22,"sell":202.18},"GBP":{"buy":225,"sell":229.5},"SAR":{"buy":45.6,"sell":46.51},"USD":{"buy":180.01,"sell":183.61}},"source":"dbhforex.com","updatedAt":"2026-09-22T15:05:00+03:00"},"ethio":{"rates":{"AED":{"buy":48.6543,"sell":49.5787},"CHF":{"buy":217.0865,"sell":221.2111},"CNY":{"buy":26.1324,"sell":26.6289},"EUR":{"buy":205.2342,"sell":209.1336},"GBP":{"buy":236.8743,"sell":241.3749},"SAR":{"buy":47.2765,"sell":48.1748},"USD":{"buy":184,"sell":187.128}},"source":"@Ethioforexrate on X (rate card, 6:45 AM)","updatedAt":"2026-09-22T06:45:00+03:00"},"haron":{"rates":{"AED":{"buy":48.5,"sell":49.47},"CAD":{"buy":121,"sell":123.42},"CHF":{"buy":216,"sell":220.32},"CNY":{"buy":26,"sell":26.52},"EUR":{"buy":204,"sell":208.08},"GBP":{"buy":235,"sell":239.7},"SAR":{"buy":47.5,"sell":48.45},"USD":{"buy":182,"sell":185.64}},"source":"haronforex.com","updatedAt":"2026-09-22T12:03:37+03:00"},"rooha":{"rates":{"AED":{"buy":48.16,"sell":49.12},"CAD":{"buy":121.7,"sell":124.13},"CHF":{"buy":217.42,"sell":221.77},"CNY":{"buy":25.7,"sell":26.21},"EUR":{"buy":205.57,"sell":209.68},"GBP":{"buy":236.58,"sell":241.31},"SAR":{"buy":47.28,"sell":48.23},"USD":{"buy":182.9,"sell":186.56}},"source":"capitalmarketethiopia.com mirror (own site feed down)","updatedAt":"2026-09-22T14:40:00+03:00"},"taypay":{"rates":{"AED":{"buy":47,"sell":47.94},"CHF":{"buy":216,"sell":220.32},"CNY":{"buy":25,"sell":25.5},"EUR":{"buy":203,"sell":207.06},"GBP":{"buy":235,"sell":239.7},"SAR":{"buy":46,"sell":46.92},"USD":{"buy":183,"sell":186.66}},"source":"taypayforexbureau.com","updatedAt":"2026-09-22T15:05:00+03:00"},"walia":{"rates":{"AED":{"buy":49.5,"sell":50.49},"CAD":{"buy":123.5,"sell":125.97},"CHF":{"buy":217.5,"sell":221.85},"CNY":{"buy":26.5,"sell":27.03},"EUR":{"buy":206,"sell":210.12},"GBP":{"buy":237,"sell":241.74},"SAR":{"buy":48,"sell":48.96},"USD":{"buy":183.5,"sell":187.17}},"source":"waliaforexet.com/api/rates","updatedAt":"2026-09-22T15:05:00+03:00"}}}]};
+  function load(obj) {
+    var days = (obj && obj.days) || [];
+    state.days = days.map(function (v) { return { date: v.date, nbe: v.nbe || {}, quotes: v.quotes || {} }; })
+      .sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, 30);
+    state.day = state.days[0] || null;
+    renderAll();
+  }
+  fetch("rates.json", { cache: "no-store" })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(load)
+    .catch(function () { load(EMBEDDED); });
+})();
+</script>
+
+</body></html>

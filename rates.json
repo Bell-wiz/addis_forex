@@ -1,0 +1,552 @@
+{
+ "days": [
+  {
+   "date": "2026-11-19",
+   "nbe": {
+    "AED": 44.1094,
+    "CAD": 113.1871,
+    "CHF": 192.2448,
+    "CNY": 24.2948,
+    "EUR": 177.6868,
+    "GBP": 213.263,
+    "SAR": 43.1829,
+    "USD": 161.1987
+   },
+   "nbeSource": "NBE daily indicative rates for 19 Nov 2026 (weighted average), as republished by bina.et and Addis Fortune's exchange page; nbe.gov.et table not machine-readable",
+   "quotes": {
+    "ammann": {
+     "rates": {
+      "AED": {
+       "buy": 49.2,
+       "sell": 50.184
+      },
+      "CAD": {
+       "buy": 124,
+       "sell": 126.48
+      },
+      "CHF": {
+       "buy": 214,
+       "sell": 218.28
+      },
+      "CNY": {
+       "buy": 26,
+       "sell": 26.52
+      },
+      "EUR": {
+       "buy": 199,
+       "sell": 202.98
+      },
+      "GBP": {
+       "buy": 238,
+       "sell": 242.76
+      },
+      "SAR": {
+       "buy": 48,
+       "sell": 48.96
+      },
+      "USD": {
+       "buy": 181,
+       "sell": 184.62
+      }
+     },
+     "source": "ammannforexbureau.com, Beherawi branch (read 19 Nov; site shows no date)",
+     "updatedAt": "2026-11-19T10:45:00+03:00"
+    },
+    "dbh": {
+     "rates": {
+      "AED": {
+       "buy": 49.1611,
+       "sell": 50.1443
+      },
+      "CAD": {
+       "buy": 122.1201,
+       "sell": 124.5625
+      },
+      "CHF": {
+       "buy": 214.7501,
+       "sell": 219.0451
+      },
+      "CNY": {
+       "buy": 26.0501,
+       "sell": 26.5711
+      },
+      "EUR": {
+       "buy": 200.1525,
+       "sell": 204.1556
+      },
+      "GBP": {
+       "buy": 231.6101,
+       "sell": 236.2423
+      },
+      "SAR": {
+       "buy": 47.6311,
+       "sell": 48.5837
+      },
+      "USD": {
+       "buy": 180.3511,
+       "sell": 183.9581
+      }
+     },
+     "source": "dbhforex.com, Main branch (site: last updated 19 Nov)",
+     "updatedAt": "2026-11-19T10:47:00+03:00"
+    },
+    "ethio": {
+     "rates": {
+      "AED": {
+       "buy": 49.2053,
+       "sell": 50.1402
+      },
+      "CAD": {
+       "buy": 124.5,
+       "sell": 126.8655
+      },
+      "CHF": {
+       "buy": 212.0976,
+       "sell": 216.1275
+      },
+      "CNY": {
+       "buy": 26.4897,
+       "sell": 26.993
+      },
+      "EUR": {
+       "buy": 198,
+       "sell": 201.564
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.503
+      },
+      "SAR": {
+       "buy": 48.0675,
+       "sell": 48.9808
+      },
+      "USD": {
+       "buy": 180,
+       "sell": 183.24
+      }
+     },
+     "source": "@Ethioforexrate on X (rate card, 19 Nov 7:24 AM)",
+     "updatedAt": "2026-11-19T07:24:00+03:00"
+    },
+    "global": {
+     "rates": {
+      "AED": {
+       "buy": 49.25,
+       "sell": 50.235
+      },
+      "CAD": {
+       "buy": 123.5,
+       "sell": 125.97
+      },
+      "CHF": {
+       "buy": 212,
+       "sell": 216.24
+      },
+      "CNY": {
+       "buy": 26,
+       "sell": 26.52
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.74
+      },
+      "SAR": {
+       "buy": 48,
+       "sell": 48.96
+      },
+      "USD": {
+       "buy": 181,
+       "sell": 184.62
+      }
+     },
+     "source": "globalforexet.com (applicable 19 Nov; selling excl. 2% fee + VAT)",
+     "updatedAt": "2026-11-19T11:00:00+03:00"
+    },
+    "haron": {
+     "rates": {
+      "AED": {
+       "buy": 49.5,
+       "sell": 50.49
+      },
+      "CAD": {
+       "buy": 124,
+       "sell": 126.48
+      },
+      "CHF": {
+       "buy": 216,
+       "sell": 220.32
+      },
+      "CNY": {
+       "buy": 26,
+       "sell": 26.52
+      },
+      "EUR": {
+       "buy": 197.75,
+       "sell": 201.705
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.74
+      },
+      "SAR": {
+       "buy": 47.5,
+       "sell": 48.45
+      },
+      "USD": {
+       "buy": 179.75,
+       "sell": 183.345
+      }
+     },
+     "source": "haronforex.com (STALE: last updated 17 Nov 10:01)",
+     "updatedAt": "2026-11-17T10:01:49+03:00"
+    },
+    "rooha": {
+     "rates": {
+      "AED": {
+       "buy": 49.28,
+       "sell": 50.2656
+      },
+      "CAD": {
+       "buy": 124.27,
+       "sell": 126.7554
+      },
+      "CHF": {
+       "buy": 212.55,
+       "sell": 216.801
+      },
+      "CNY": {
+       "buy": 26.31,
+       "sell": 26.8362
+      },
+      "EUR": {
+       "buy": 199.31,
+       "sell": 203.2962
+      },
+      "GBP": {
+       "buy": 237.22,
+       "sell": 241.9644
+      },
+      "SAR": {
+       "buy": 48.11,
+       "sell": 49.0722
+      },
+      "USD": {
+       "buy": 181.03,
+       "sell": 184.6506
+      }
+     },
+     "source": "roohaforex.net (applicable 19 Nov; selling excl. 0.5% fee)",
+     "updatedAt": "2026-11-19T10:50:00+03:00"
+    },
+    "taypay": {
+     "rates": {
+      "AED": {
+       "buy": 48.9999,
+       "sell": 49.9799
+      },
+      "CHF": {
+       "buy": 216.9999,
+       "sell": 221.3399
+      },
+      "CNY": {
+       "buy": 25.9999,
+       "sell": 26.5199
+      },
+      "EUR": {
+       "buy": 198.9999,
+       "sell": 202.9799
+      },
+      "GBP": {
+       "buy": 234.9999,
+       "sell": 239.6999
+      },
+      "SAR": {
+       "buy": 46.9999,
+       "sell": 47.9399
+      },
+      "USD": {
+       "buy": 180.9998,
+       "sell": 184.6198
+      }
+     },
+     "source": "taypayforexbureau.com (dated 19 Nov)",
+     "updatedAt": "2026-11-19T10:52:00+03:00"
+    }
+   }
+  },
+  {
+   "date": "2026-09-22",
+   "nbe": {
+    "AED": 43.9922,
+    "CAD": 115.8956,
+    "CHF": 197.2291,
+    "CNY": 24.088,
+    "EUR": 186.371,
+    "GBP": 217.3602,
+    "SAR": 43.0142,
+    "USD": 160.7662
+   },
+   "nbeSource": "NBE daily indicative rates",
+   "quotes": {
+    "ammann": {
+     "rates": {
+      "AED": {
+       "buy": 48.5,
+       "sell": 49.47
+      },
+      "CAD": {
+       "buy": 123,
+       "sell": 125.46
+      },
+      "CHF": {
+       "buy": 217,
+       "sell": 221.34
+      },
+      "CNY": {
+       "buy": 26,
+       "sell": 26.52
+      },
+      "EUR": {
+       "buy": 206,
+       "sell": 210.12
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.74
+      },
+      "SAR": {
+       "buy": 47,
+       "sell": 47.94
+      },
+      "USD": {
+       "buy": 183.5,
+       "sell": 187.17
+      }
+     },
+     "source": "ammannforexbureau.com (Beherawi branch)",
+     "updatedAt": "2026-09-22T15:05:00+03:00"
+    },
+    "dbh": {
+     "rates": {
+      "AED": {
+       "buy": 47.23,
+       "sell": 48.18
+      },
+      "CAD": {
+       "buy": 113.01,
+       "sell": 115.27
+      },
+      "CHF": {
+       "buy": 209.1,
+       "sell": 213.28
+      },
+      "CNY": {
+       "buy": 23.38,
+       "sell": 23.85
+      },
+      "EUR": {
+       "buy": 198.22,
+       "sell": 202.18
+      },
+      "GBP": {
+       "buy": 225,
+       "sell": 229.5
+      },
+      "SAR": {
+       "buy": 45.6,
+       "sell": 46.51
+      },
+      "USD": {
+       "buy": 180.01,
+       "sell": 183.61
+      }
+     },
+     "source": "dbhforex.com",
+     "updatedAt": "2026-09-22T15:05:00+03:00"
+    },
+    "ethio": {
+     "rates": {
+      "AED": {
+       "buy": 48.6543,
+       "sell": 49.5787
+      },
+      "CHF": {
+       "buy": 217.0865,
+       "sell": 221.2111
+      },
+      "CNY": {
+       "buy": 26.1324,
+       "sell": 26.6289
+      },
+      "EUR": {
+       "buy": 205.2342,
+       "sell": 209.1336
+      },
+      "GBP": {
+       "buy": 236.8743,
+       "sell": 241.3749
+      },
+      "SAR": {
+       "buy": 47.2765,
+       "sell": 48.1748
+      },
+      "USD": {
+       "buy": 184,
+       "sell": 187.128
+      }
+     },
+     "source": "@Ethioforexrate on X (rate card, 6:45 AM)",
+     "updatedAt": "2026-09-22T06:45:00+03:00"
+    },
+    "haron": {
+     "rates": {
+      "AED": {
+       "buy": 48.5,
+       "sell": 49.47
+      },
+      "CAD": {
+       "buy": 121,
+       "sell": 123.42
+      },
+      "CHF": {
+       "buy": 216,
+       "sell": 220.32
+      },
+      "CNY": {
+       "buy": 26,
+       "sell": 26.52
+      },
+      "EUR": {
+       "buy": 204,
+       "sell": 208.08
+      },
+      "GBP": {
+       "buy": 235,
+       "sell": 239.7
+      },
+      "SAR": {
+       "buy": 47.5,
+       "sell": 48.45
+      },
+      "USD": {
+       "buy": 182,
+       "sell": 185.64
+      }
+     },
+     "source": "haronforex.com",
+     "updatedAt": "2026-09-22T12:03:37+03:00"
+    },
+    "rooha": {
+     "rates": {
+      "AED": {
+       "buy": 48.16,
+       "sell": 49.12
+      },
+      "CAD": {
+       "buy": 121.7,
+       "sell": 124.13
+      },
+      "CHF": {
+       "buy": 217.42,
+       "sell": 221.77
+      },
+      "CNY": {
+       "buy": 25.7,
+       "sell": 26.21
+      },
+      "EUR": {
+       "buy": 205.57,
+       "sell": 209.68
+      },
+      "GBP": {
+       "buy": 236.58,
+       "sell": 241.31
+      },
+      "SAR": {
+       "buy": 47.28,
+       "sell": 48.23
+      },
+      "USD": {
+       "buy": 182.9,
+       "sell": 186.56
+      }
+     },
+     "source": "capitalmarketethiopia.com mirror (own site feed down)",
+     "updatedAt": "2026-09-22T14:40:00+03:00"
+    },
+    "taypay": {
+     "rates": {
+      "AED": {
+       "buy": 47,
+       "sell": 47.94
+      },
+      "CHF": {
+       "buy": 216,
+       "sell": 220.32
+      },
+      "CNY": {
+       "buy": 25,
+       "sell": 25.5
+      },
+      "EUR": {
+       "buy": 203,
+       "sell": 207.06
+      },
+      "GBP": {
+       "buy": 235,
+       "sell": 239.7
+      },
+      "SAR": {
+       "buy": 46,
+       "sell": 46.92
+      },
+      "USD": {
+       "buy": 183,
+       "sell": 186.66
+      }
+     },
+     "source": "taypayforexbureau.com",
+     "updatedAt": "2026-09-22T15:05:00+03:00"
+    },
+    "walia": {
+     "rates": {
+      "AED": {
+       "buy": 49.5,
+       "sell": 50.49
+      },
+      "CAD": {
+       "buy": 123.5,
+       "sell": 125.97
+      },
+      "CHF": {
+       "buy": 217.5,
+       "sell": 221.85
+      },
+      "CNY": {
+       "buy": 26.5,
+       "sell": 27.03
+      },
+      "EUR": {
+       "buy": 206,
+       "sell": 210.12
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.74
+      },
+      "SAR": {
+       "buy": 48,
+       "sell": 48.96
+      },
+      "USD": {
+       "buy": 183.5,
+       "sell": 187.17
+      }
+     },
+     "source": "waliaforexet.com/api/rates",
+     "updatedAt": "2026-09-22T15:05:00+03:00"
+    }
+   }
+  }
+ ]
+}
