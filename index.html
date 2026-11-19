@@ -256,6 +256,11 @@
   .dir .l { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
   .dir a { color: var(--accent); text-decoration: none; font-size: 12.5px; }
   .dir a:hover { text-decoration: underline; }
+  .dir .addr { font-size: 12.5px; color: var(--ink-2); margin-top: 4px; }
+  .dir .links { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; }
+  .bmeta a, .silent li a { color: var(--accent); text-decoration: none; }
+  .bmeta a:hover, .silent li a:hover { text-decoration: underline; }
+  .silent li a.mp { font-family: inherit; margin-left: 8px; font-size: 11.5px; }
 
   footer.note { margin-top: 30px; font-size: 12px; color: var(--ink-3); line-height: 1.7; }
   footer.note strong { color: var(--ink-2); font-weight: 600; }
@@ -355,13 +360,14 @@
 
   <section class="panel">
     <h2>The fifteen licensed bureaus</h2>
-    <p class="lede">Independent forex bureaus on the National Bank of Ethiopia register, with the licence number each one trades under.</p>
+    <p class="lede">Independent forex bureaus on the National Bank of Ethiopia register, with the licence number each one trades under, a phone number and a map link.</p>
     <div class="dir" id="dir"></div>
   </section>
 
   <footer class="note">
     <strong>Reading the board.</strong> Buying is what the bureau pays you for foreign cash; selling is what it charges you. Rates are per one unit of currency, in birr. Some bureaus quote a selling rate that excludes a service fee of up to 2 percent &mdash; confirm the all-in figure at the counter before you transact.<br>
-    <strong>Sources.</strong> Bureau rates are read from each bureau&rsquo;s own published board where it has one, and entered by hand otherwise. The NBE indicative rate is the weighted average of the previous business day&rsquo;s interbank transactions and is a reference, not a price anyone is obliged to offer.
+    <strong>Sources.</strong> Bureau rates are read from each bureau&rsquo;s own published board where it has one, and entered by hand otherwise. The NBE indicative rate is the weighted average of the previous business day&rsquo;s interbank transactions and is a reference, not a price anyone is obliged to offer.<br>
+    <strong>Contacts.</strong> Phone numbers and map links come from each bureau&rsquo;s own website or Google Maps listing. Where neither gave one, the phone is the contact number on the NBE register. &ldquo;Search map&rdquo; runs a Google Maps search on the bureau&rsquo;s name and area, because no pinned listing for that office was found.
   </footer>
 </div>
 
@@ -380,23 +386,26 @@
     { code: "CNY", name: "Yuan" }
   ];
 
-  // Public register data (National Bank of Ethiopia, Independent Forex Bureaus).
+  // Licence data: National Bank of Ethiopia register of independent forex bureaus.
+  // Contacts (checked 19 Nov 2026): phone and map from the bureau's own website or its
+  // Google Maps listing; where neither had one, the phone is the NBE register contact
+  // and the map link is a Google Maps search (no confirmed location).
   var BUREAUS = [
-    { slug: "ammann",  name: "Ammann Forex Bureau",        lic: "AMT/IFB/10/2024", phone: "0911-22-01-98", site: "ammannforexbureau.com" },
-    { slug: "ayotan",  name: "AYOTAN Forex Bureau",        lic: "AYT/IFB/09/2024", phone: "0930-25-12-36", site: "" },
-    { slug: "dbh",     name: "DBH Forex Bureau",           lic: "DBH/IFB/06/2024", phone: "0913-06-48-30", site: "dbhforex.com" },
-    { slug: "ethio",   name: "Ethio Forex Bureau",         lic: "EFT/IFB/02/2024", phone: "0911-23-39-88", site: "" },
-    { slug: "fourx",   name: "FOUR X Forex Bureau",        lic: "DFI/IFB/03/2024", phone: "0974-55-49-50", site: "" },
-    { slug: "global",  name: "Global Forex Bureau",        lic: "AAA/IFB/04/2024", phone: "0911-22-32-68", site: "" },
-    { slug: "grace",   name: "Grace General Forex Bureau", lic: "GGT/IFB/14/2026", phone: "0969-78-78-78", site: "" },
-    { slug: "haron",   name: "Haron Forex Bureau",         lic: "HCO/IFB/12/2024", phone: "0911-20-72-82", site: "haronforex.com" },
-    { slug: "robust",  name: "Robust Forex Bureau",        lic: "RBG/IFB/01/2024", phone: "0911-24-68-47", site: "" },
-    { slug: "rooha",   name: "Rooha Forex Bureau",         lic: "RFT/IFB/07/2024", phone: "0915-99-00-07", site: "roohaforex.net" },
-    { slug: "sheba",   name: "Sheba Forex Bureau",         lic: "SFB/IFB/11/2024", phone: "0911-21-39-40", site: "" },
-    { slug: "sibrat",  name: "Sibrat Forex Bureau",        lic: "SIT/IFB/08/2024", phone: "0917-55-16-11", site: "" },
-    { slug: "taypay",  name: "Taypay Forex Bureau",        lic: "TFT/IFB/13/2024", phone: "0915-75-20-67", site: "" },
-    { slug: "walia",   name: "Walia Forex Bureau",         lic: "WFT/IFB/16/2026", phone: "0967-21-77-77", site: "" },
-    { slug: "yoga",    name: "Yoga Forex Bureau",          lic: "YOT/IFB/05/2024", phone: "0982-77-77-70", site: "" }
+    { slug: "ammann", name: "Ammann Forex Bureau", lic: "AMT/IFB/10/2024", phone: "0908 251 111", tel: "+251908251111", phoneSrc: "bureau site", addr: "Beherawi branch, National Theatre area, Churchill Ave", map: "https://maps.google.com/?q=9.0157,38.7525", site: "ammannforexbureau.com" },
+    { slug: "ayotan", name: "AYOTAN Forex Bureau", lic: "AYT/IFB/09/2024", phone: "0930 251 236", tel: "+251930251236", phoneSrc: "NBE register", addr: "", map: "https://www.google.com/maps/search/?api=1&query=AYOTAN%20Forex%20Bureau%2C%20Addis%20Ababa", site: "" },
+    { slug: "dbh", name: "DBH Forex Bureau", lic: "DBH/IFB/06/2024", phone: "011 639 3690", tel: "+251116393690", phoneSrc: "bureau site", addr: "Gumsa Tower, Bole Michael", map: "https://www.google.com/maps/search/?api=1&query=DBH%20Forex%20Bureau%2C%20Gumsa%20Tower%2C%20Bole%20Michael%2C%20Addis%20Ababa", site: "dbhforex.com" },
+    { slug: "ethio", name: "Ethio Forex Bureau", lic: "EFT/IFB/02/2024", phone: "0987 888 844", tel: "+251987888844", phoneSrc: "bureau site", addr: "Ethiopia Hotel branch, Yohannes St", map: "https://maps.app.goo.gl/3j6NTAQZ67rn9Dtz8", site: "ethioforextrading.com" },
+    { slug: "fourx", name: "FOUR X Forex Bureau", lic: "DFI/IFB/03/2024", phone: "0974 554 950", tel: "+251974554950", phoneSrc: "NBE register and Google listing", addr: "First floor, Ramada Hotel, Africa Ave", map: "https://www.google.com/maps/search/?api=1&query=4X%20Bureau%20De%20Change&query_place_id=ChIJ3adbbACFSxYR5hnYAtVwQls", site: "" },
+    { slug: "global", name: "Global Forex Bureau", lic: "AAA/IFB/04/2024", phone: "011 672 5353", tel: "+251116725353", phoneSrc: "bureau site", addr: "Berhane Adere Mall, Bole Medhanialem", map: "https://www.google.com/maps/search/?api=1&query=Global%20Forex%20Bureau%20Addis&query_place_id=ChIJnSUOuLiFSxYRIuTHZfj6bZY", site: "globalforexet.com" },
+    { slug: "grace", name: "Grace General Forex Bureau", lic: "GGT/IFB/14/2026", phone: "0969 787 878", tel: "+251969787878", phoneSrc: "NBE register", addr: "", map: "https://www.google.com/maps/search/?api=1&query=Grace%20General%20Forex%20Bureau%2C%20Addis%20Ababa", site: "" },
+    { slug: "haron", name: "Haron Forex Bureau", lic: "HCO/IFB/12/2024", phone: "0911 207 282", tel: "+251911207282", phoneSrc: "bureau site", addr: "Haron Tower", map: "https://www.google.com/maps/search/?api=1&query=Haron%20Forex%20Bureau%2C%20Haron%20Tower%2C%20Addis%20Ababa", site: "haronforex.com" },
+    { slug: "robust", name: "Robust Forex Bureau", lic: "RBG/IFB/01/2024", phone: "0911 246 847", tel: "+251911246847", phoneSrc: "NBE register", addr: "Near Saromaria Hotel, Bole Medhanialem", map: "https://www.google.com/maps/search/?api=1&query=Robust%20Forex%20Bureau%2C%20Saromaria%20Hotel%2C%20Bole%20Medhanialem%2C%20Addis%20Ababa", site: "" },
+    { slug: "rooha", name: "Rooha Forex Bureau", lic: "RFT/IFB/07/2024", phone: "0960 444 333", tel: "+251960444333", phoneSrc: "bureau site", addr: "Kasanchis (head office)", map: "https://www.google.com/maps/search/?api=1&query=Rooha%20Forex%20Bureau&query_place_id=ChIJS9z9egCFSxYRgm9Nzq7BaH4", site: "roohaforex.net" },
+    { slug: "sheba", name: "Sheba Forex Bureau", lic: "SFB/IFB/11/2024", phone: "0911 213 940", tel: "+251911213940", phoneSrc: "NBE register", addr: "", map: "https://www.google.com/maps/search/?api=1&query=Sheba%20Forex%20Bureau%2C%20Addis%20Ababa", site: "" },
+    { slug: "sibrat", name: "Sibrat Forex Bureau", lic: "SIT/IFB/08/2024", phone: "0917 551 611", tel: "+251917551611", phoneSrc: "NBE register and Google listing", addr: "Airport Rd, Bole", map: "https://www.google.com/maps/search/?api=1&query=Sibrat%20Forex%20Bureau&query_place_id=ChIJa7G9dl6FSxYRK2Hzd8Rb1A0", site: "" },
+    { slug: "taypay", name: "Taypay Forex Bureau", lic: "TFT/IFB/13/2024", phone: "011 531 9132", tel: "+251115319132", phoneSrc: "bureau site", addr: "Stadium branch", map: "https://maps.app.goo.gl/KES3uhmRn46s1n7K7", site: "taypayforexbureau.com" },
+    { slug: "walia", name: "Walia Forex Bureau", lic: "WFT/IFB/16/2026", phone: "0967 217 777", tel: "+251967217777", phoneSrc: "bureau site", addr: "Head office", map: "https://maps.app.goo.gl/WRjoNkT1CADd6QXU7", site: "waliaforexet.com" },
+    { slug: "yoga", name: "Yoga Forex Bureau", lic: "YOT/IFB/05/2024", phone: "0982 777 770", tel: "+251982777770", phoneSrc: "NBE register", addr: "Next to the EU office", map: "https://www.google.com/maps/search/?api=1&query=Yoga%20Forex%20Bureau%2C%20EU%20Delegation%2C%20Addis%20Ababa", site: "" }
   ];
   var BY_SLUG = {};
   BUREAUS.forEach(function (b) { BY_SLUG[b.slug] = b; });
@@ -436,6 +445,20 @@
     if (cls) e.className = cls;
     if (text !== undefined && text !== null) e.textContent = text;
     return e;
+  }
+
+  function telLink(b, cls) {
+    var a = el("a", cls || null, b.phone);
+    a.href = "tel:" + b.tel;
+    a.title = "Call " + b.name + (b.phoneSrc === "NBE register" ? " (number from the NBE register)" : "");
+    return a;
+  }
+  function mapLink(b, cls) {
+    var search = b.map.indexOf("/maps/search/") >= 0 && b.map.indexOf("query_place_id") < 0;
+    var a = el("a", cls || null, search ? "Search map" : "Map");
+    a.href = b.map; a.target = "_blank"; a.rel = "noopener";
+    a.title = search ? "Search Google Maps for " + b.name + (b.addr ? ", " + b.addr : "") + " (no pinned listing found)" : b.name + (b.addr ? ", " + b.addr : "");
+    return a;
   }
 
   function quotesFor(day, ccy) {
@@ -547,7 +570,11 @@
     silent.forEach(function (r) {
       var li = el("li");
       li.appendChild(el("b", null, r.name.replace(" Forex Bureau", "")));
-      li.appendChild(el("span", null, BY_SLUG[r.slug].phone));
+      var sb = BY_SLUG[r.slug];
+      var sp = el("span");
+      sp.appendChild(telLink(sb));
+      li.appendChild(sp);
+      if (sb.map) li.appendChild(mapLink(sb, "mp"));
       silentList.appendChild(li);
     });
 
@@ -556,7 +583,11 @@
 
       var td1 = el("td");
       td1.appendChild(el("span", "bname", r.name));
-      td1.appendChild(el("span", "bmeta", r.lic));
+      var rb = BY_SLUG[r.slug];
+      var meta = el("span", "bmeta", r.lic + " · ");
+      meta.appendChild(telLink(rb));
+      if (rb.map) { meta.appendChild(document.createTextNode(" · ")); meta.appendChild(mapLink(rb)); }
+      td1.appendChild(meta);
       tr.appendChild(td1);
 
       // buying
@@ -731,13 +762,18 @@
     BUREAUS.forEach(function (b) {
       var d = el("div");
       d.appendChild(el("div", "n", b.name));
-      d.appendChild(el("div", "l", b.lic + " · " + b.phone));
+      d.appendChild(el("div", "l", b.lic));
+      if (b.addr) d.appendChild(el("div", "addr", b.addr));
+      var lk = el("div", "links");
+      lk.appendChild(telLink(b));
+      if (b.map) lk.appendChild(mapLink(b));
       if (b.site) {
         var a = el("a", null, b.site);
         a.href = "https://" + b.site;
         a.target = "_blank"; a.rel = "noopener";
-        d.appendChild(a);
+        lk.appendChild(a);
       }
+      d.appendChild(lk);
       host.appendChild(d);
     });
   }
