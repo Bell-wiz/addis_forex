@@ -1,0 +1,49 @@
+name: Update forex rates
+
+on:
+  schedule:
+    - cron: '15 6 * * 1-5'   # 09:15 Addis Ababa (UTC+3), Monday to Friday
+  workflow_dispatch:
+    inputs:
+      skip:
+        description: 'Bureaus to leave out this run, comma separated (for example walia)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-rates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install the browser used for three sites
+        run: npm i --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
+      - name: Read the NBE rate and the bureaus
+        run: node scripts/update-rates.mjs read > "$RUNNER_TEMP/readings.json"
+      - name: Merge into rates.json and push
+        env:
+          SKIP: ${{ github.event.inputs.skip }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch -q origin main
+            git reset -q --hard origin/main
+            node scripts/update-rates.mjs merge "$RUNNER_TEMP/readings.json"
+            if git diff --quiet -- rates.json; then echo "rates.json unchanged"; exit 0; fi
+            git add rates.json
+            git commit -q -m "Rates for $(jq -r .date "$RUNNER_TEMP/readings.json") (automatic)"
+            if git push -q origin HEAD:main; then git log -1 --stat; exit 0; fi
+            echo "Push lost a race, trying again"; sleep 10
+          done
+          exit 1
