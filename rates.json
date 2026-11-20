@@ -12,7 +12,7 @@
     "SAR": 43.2526,
     "USD": 161.4504
    },
-   "nbeSource": "NBE daily indicative rates for 20 Nov 2026 (weighted average), as republished by bina.et; Addis Fortune cross-check not done this run",
+   "nbeSource": "NBE daily indicative rates for 20 Nov 2026 (weighted average), as republished by bina.et; Addis Fortune cross-check not done this run; NBE daily indicative rates for 20 Nov (weighted average) from api.nbe.gov.et: USD, EUR, AED",
    "quotes": {
     "ammann": {
      "rates": {
@@ -87,8 +87,8 @@
        "sell": 183.9581
       }
      },
-     "source": "dbhforex.com, Main branch (site: last updated 20 Nov; same figures as 19 Nov)",
-     "updatedAt": "2026-11-20T09:21:00+03:00"
+     "source": "dbhforex.com, Main branch (site: last updated 20 Nov)",
+     "updatedAt": "2026-11-20T14:27:00+03:00"
     },
     "ethio": {
      "rates": {
@@ -160,7 +160,7 @@
       }
      },
      "source": "globalforexet.com (applicable 20 Nov; selling excl. 2% fee + VAT)",
-     "updatedAt": "2026-11-20T09:22:00+03:00"
+     "updatedAt": "2026-11-20T14:27:00+03:00"
     },
     "rooha": {
      "rates": {
@@ -198,7 +198,7 @@
       }
      },
      "source": "roohaforex.net (applicable 20 Nov; selling excl. 0.5% fee)",
-     "updatedAt": "2026-11-20T09:23:00+03:00"
+     "updatedAt": "2026-11-20T14:27:00+03:00"
     },
     "taypay": {
      "rates": {
@@ -232,7 +232,7 @@
       }
      },
      "source": "taypayforexbureau.com (undated; read 20 Nov)",
-     "updatedAt": "2026-11-20T09:24:00+03:00"
+     "updatedAt": "2026-11-20T14:27:00+03:00"
     }
    }
   },
