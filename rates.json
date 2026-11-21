@@ -1,6 +1,203 @@
 {
  "days": [
   {
+   "date": "2026-11-21",
+   "nbe": {
+    "AED": 44.1782,
+    "EUR": 178.4023,
+    "USD": 161.4504
+   },
+   "nbeSource": "STALE: NBE daily indicative rates for 20 Nov (weighted average) from api.nbe.gov.et: USD, EUR, AED (NBE had not published a rate for this day when read)",
+   "quotes": {
+    "dbh": {
+     "rates": {
+      "AED": {
+       "buy": 49.1611,
+       "sell": 50.1443
+      },
+      "CAD": {
+       "buy": 122.1201,
+       "sell": 124.5625
+      },
+      "CHF": {
+       "buy": 214.7501,
+       "sell": 219.0451
+      },
+      "CNY": {
+       "buy": 26.0501,
+       "sell": 26.5711
+      },
+      "EUR": {
+       "buy": 200.1525,
+       "sell": 204.1556
+      },
+      "GBP": {
+       "buy": 231.6101,
+       "sell": 236.2423
+      },
+      "SAR": {
+       "buy": 47.6311,
+       "sell": 48.5837
+      },
+      "USD": {
+       "buy": 180.3511,
+       "sell": 183.9581
+      }
+     },
+     "source": "dbhforex.com, Main branch (site: last updated 21 Nov)",
+     "updatedAt": "2026-11-21T09:51:00+03:00"
+    },
+    "haron": {
+     "rates": {
+      "AED": {
+       "buy": 49.5,
+       "sell": 50.49
+      },
+      "CAD": {
+       "buy": 124,
+       "sell": 126.48
+      },
+      "CHF": {
+       "buy": 216,
+       "sell": 220.32
+      },
+      "CNY": {
+       "buy": 26,
+       "sell": 26.52
+      },
+      "EUR": {
+       "buy": 197.75,
+       "sell": 201.705
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.74
+      },
+      "SAR": {
+       "buy": 47.5,
+       "sell": 48.45
+      },
+      "USD": {
+       "buy": 179.75,
+       "sell": 183.345
+      }
+     },
+     "source": "haronforex.com (last updated 17 Nov 10:01) (STALE: dated 17 Nov)",
+     "updatedAt": "2026-11-17T10:01:49+03:00"
+    },
+    "rooha": {
+     "rates": {
+      "AED": {
+       "buy": 49.32,
+       "sell": 50.3064
+      },
+      "CAD": {
+       "buy": 124.3,
+       "sell": 126.786
+      },
+      "CHF": {
+       "buy": 212.7,
+       "sell": 216.954
+      },
+      "CNY": {
+       "buy": 26.35,
+       "sell": 26.877
+      },
+      "EUR": {
+       "buy": 199.25,
+       "sell": 203.235
+      },
+      "GBP": {
+       "buy": 237.44,
+       "sell": 242.1888
+      },
+      "SAR": {
+       "buy": 48.14,
+       "sell": 49.1028
+      },
+      "USD": {
+       "buy": 181.51,
+       "sell": 185.1402
+      }
+     },
+     "source": "roohaforex.net (applicable 21 Nov; selling excl. 0.5% fee)",
+     "updatedAt": "2026-11-21T09:51:00+03:00"
+    },
+    "taypay": {
+     "rates": {
+      "AED": {
+       "buy": 48.9999,
+       "sell": 49.9799
+      },
+      "CHF": {
+       "buy": 216.9999,
+       "sell": 221.3399
+      },
+      "CNY": {
+       "buy": 25.9999,
+       "sell": 26.5199
+      },
+      "EUR": {
+       "buy": 198.9999,
+       "sell": 202.9799
+      },
+      "GBP": {
+       "buy": 234.9999,
+       "sell": 239.6999
+      },
+      "SAR": {
+       "buy": 46.9999,
+       "sell": 47.9399
+      },
+      "USD": {
+       "buy": 180.9998,
+       "sell": 184.6198
+      }
+     },
+     "source": "taypayforexbureau.com (undated; read 21 Nov)",
+     "updatedAt": "2026-11-21T09:51:00+03:00"
+    },
+    "walia": {
+     "rates": {
+      "AED": {
+       "buy": 49.25,
+       "sell": 50.235
+      },
+      "CAD": {
+       "buy": 124,
+       "sell": 126.48
+      },
+      "CHF": {
+       "buy": 217,
+       "sell": 221.34
+      },
+      "CNY": {
+       "buy": 27,
+       "sell": 27.54
+      },
+      "EUR": {
+       "buy": 199,
+       "sell": 202.98
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.74
+      },
+      "SAR": {
+       "buy": 48,
+       "sell": 48.96
+      },
+      "USD": {
+       "buy": 181,
+       "sell": 184.62
+      }
+     },
+     "source": "waliaforexet.com, Head Office (effective 21 Nov; 1.4% service charge not included)",
+     "updatedAt": "2026-11-21T09:51:00+03:00"
+    }
+   }
+  },
+  {
    "date": "2026-11-20",
    "nbe": {
     "AED": 44.1782,
