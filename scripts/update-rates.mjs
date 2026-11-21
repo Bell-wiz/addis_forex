@@ -1,8 +1,10 @@
 // Addis Forex Board: weekday rate reader.
 //   node scripts/update-rates.mjs read  > readings.json   (reads the sources)
 //   node scripts/update-rates.mjs merge readings.json      (merges into rates.json)
-// Rules: a bureau is recorded only when its own date is today in Addis (Taypay
-// shows no date and is recorded as "undated"). Walia uses Head Office rows.
+// Rules: a bureau is recorded when its own date is today in Addis. A source
+// whose latest date is earlier (up to STALE_DAYS back, e.g. on a Saturday) is
+// recorded with "STALE: dated <day>" in its source; older ones are left out.
+// Taypay shows no date and is recorded as "undated". Walia uses Head Office rows.
 // A bureau whose USD buy is below the NBE rate is kept but marked doubtful.
 // Nothing is invented: a source that fails or is not dated today is left out,
 // and quotes already in today's entry (for example Ethio Forex, added by hand)
@@ -12,6 +14,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const CCYS = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'CAD', 'CHF', 'CNY'];
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36';
 const TZ = 'Africa/Addis_Ababa';
+const STALE_DAYS = 7;
 
 function addisNow() {
   const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date()).map(x => [x.type, x.value]));
@@ -21,6 +24,9 @@ function addisNow() {
 const NOW = addisNow();
 const TODAY = NOW.date;
 const prettyDate = d => new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const ageDays = d => Math.round((Date.parse(TODAY + 'T00:00:00Z') - Date.parse(d + 'T00:00:00Z')) / 86400000);
+const usable = d => d && ageDays(d) >= 0 && ageDays(d) <= STALE_DAYS;
+const latest = ds => ds.filter(usable).sort().pop() || null;
 const num = v => { const n = parseFloat(String(v).replace(/,/g, '')); return Number.isFinite(n) && n > 0 ? n : null; };
 const mdyToIso = s => { const m = s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? `${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}` : null; };
 
@@ -44,11 +50,13 @@ async function getJson(url) {
 
 async function readNbe() {
   const j = await getJson('https://api.nbe.gov.et/api/get-selected-exchange-rates');
-  const rows = (j.data || []).filter(r => r.date === TODAY);
+  const all = j.data || [];
+  const date = latest([...new Set(all.map(r => r.date))]);
+  const rows = all.filter(r => r.date === date);
   const nbe = {};
   for (const r of rows) { const c = r.currency && r.currency.code; const v = num(r.weighted_average); if (CCYS.includes(c) && v) nbe[c] = v; }
-  if (!Object.keys(nbe).length) throw new Error(`no rates dated ${TODAY} (NBE dates: ${[...new Set((j.data || []).map(r => r.date))].join(', ') || 'none'})`);
-  return nbe;
+  if (!Object.keys(nbe).length) throw new Error(`no recent rates (NBE dates: ${[...new Set(all.map(r => r.date))].join(', ') || 'none'})`);
+  return { nbe, date };
 }
 
 // Global, Rooha and Walia share one API shape.
@@ -57,12 +65,13 @@ async function readPublicApi(url, { branch }) {
   let rows = j.data || [];
   if (branch) rows = rows.filter(r => (r.branchName || '').trim().toLowerCase() === branch.toLowerCase());
   const dates = [...new Set(rows.map(r => r.effectiveDate))];
-  const today = rows.filter(r => r.effectiveDate === TODAY);
-  if (!today.length) throw new Error(`not dated today (source dates: ${dates.join(', ') || 'none'})`);
+  const date = latest(dates);
+  const today = rows.filter(r => r.effectiveDate === date);
+  if (!today.length) throw new Error(`nothing recent (source dates: ${dates.join(', ') || 'none'})`);
   const rates = rateMap(today.map(r => ({ code: r.currencyCode, buy: r.buy, sell: r.sell })));
   if (!rates) throw new Error('no usable rows');
   const fee = num(today[0].serviceChargeValue);
-  return { rates, fee };
+  return { rates, fee, date };
 }
 
 async function withPage(browser, url, fn) {
@@ -84,13 +93,13 @@ async function readDbh(browser) {
     if (status >= 400) throw new Error(`HTTP ${status}`);
     const m = text.match(/LAST UPDATED:\s*(\d{1,2}\/\d{1,2}\/\d{4})/i);
     const siteDate = m ? mdyToIso(m[1]) : null;
-    if (siteDate !== TODAY) throw new Error(`site date ${siteDate || 'not found'}, not today`);
+    if (!usable(siteDate)) throw new Error(`site date ${siteDate || 'not found'}, too old`);
     const api = json.find(j => /currencyrates/.test(j.url));
     if (!api) throw new Error('rate feed not seen');
     const rows = (api.body.data || []).filter(r => r.branch && r.branch.name === 'DBH Main');
     const rates = rateMap(rows.map(r => ({ code: r.currency && r.currency.code, buy: r.buying_price, sell: r.selling_price })));
     if (!rates) throw new Error('no usable rows');
-    return { rates, source: `dbhforex.com, Main branch (site: last updated ${prettyDate(TODAY)})` };
+    return { rates, date: siteDate, source: `dbhforex.com, Main branch (site: last updated ${prettyDate(siteDate)})` };
   });
 }
 
@@ -104,7 +113,7 @@ async function readTaypay(browser) {
     }
     const rates = rateMap(rows);
     if (!rates) throw new Error('rate table not found');
-    return { rates, source: `taypayforexbureau.com (undated; read ${prettyDate(TODAY)})` };
+    return { rates, date: TODAY, source: `taypayforexbureau.com (undated; read ${prettyDate(TODAY)})` };
   });
 }
 
@@ -113,7 +122,7 @@ async function readHaron(browser) {
     if (status >= 400) throw new Error(`HTTP ${status}`);
     const m = text.match(/Last updated:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})/i);
     if (!m) throw new Error('date not found');
-    if (m[1] !== TODAY) throw new Error(`last updated ${m[1]}, not today`);
+    if (!usable(m[1])) throw new Error(`last updated ${m[1]}, too old`);
     const lines = text.split('\n').map(s => s.trim()).filter(Boolean);
     const rows = [];
     for (let i = 0; i < lines.length; i++) {
@@ -124,7 +133,7 @@ async function readHaron(browser) {
     }
     const rates = rateMap(rows);
     if (!rates) throw new Error('rate cards not found');
-    return { rates, source: `haronforex.com (last updated ${prettyDate(m[1])} ${m[2].slice(0, 5)})`, updatedAt: `${m[1]}T${m[2]}+03:00` };
+    return { rates, date: m[1], source: `haronforex.com (last updated ${prettyDate(m[1])} ${m[2].slice(0, 5)})`, updatedAt: `${m[1]}T${m[2]}+03:00` };
   });
 }
 
@@ -138,15 +147,16 @@ async function readAmmann(browser) {
 async function read() {
   const out = { date: TODAY, readAt: NOW.iso, nbe: null, quotes: {}, log: [] };
   const note = (k, ok, msg) => { out.log.push(`${ok ? 'OK  ' : 'SKIP'} ${k}: ${msg}`); };
-  try { out.nbe = await readNbe(); note('nbe', true, Object.keys(out.nbe).join(' ')); } catch (e) { note('nbe', false, e.message); }
+  const stale = d => d !== TODAY ? ` (STALE: dated ${prettyDate(d)})` : '';
+  try { const r = await readNbe(); out.nbe = r.nbe; out.nbeDate = r.date; note('nbe', true, `${Object.keys(r.nbe).join(' ')}${stale(r.date)}`); } catch (e) { note('nbe', false, e.message); }
 
   const api = [
-    ['global', 'https://www.globalforexet.com/api/public-exchange-rates', {}, r => `globalforexet.com (applicable ${prettyDate(TODAY)}; selling excl. ${r.fee ?? '?'}% fee + VAT)`],
-    ['rooha', 'https://www.roohaforex.net/api/public-exchange-rates', {}, r => `roohaforex.net (applicable ${prettyDate(TODAY)}; selling excl. ${r.fee ?? '?'}% fee)`],
-    ['walia', 'https://www.waliaforexet.com/api/rates', { branch: 'Head Office' }, r => `waliaforexet.com, Head Office (effective ${prettyDate(TODAY)}; ${r.fee ?? '?'}% service charge not included)`],
+    ['global', 'https://www.globalforexet.com/api/public-exchange-rates', {}, r => `globalforexet.com (applicable ${prettyDate(r.date)}; selling excl. ${r.fee ?? '?'}% fee + VAT)`],
+    ['rooha', 'https://www.roohaforex.net/api/public-exchange-rates', {}, r => `roohaforex.net (applicable ${prettyDate(r.date)}; selling excl. ${r.fee ?? '?'}% fee)`],
+    ['walia', 'https://www.waliaforexet.com/api/rates', { branch: 'Head Office' }, r => `waliaforexet.com, Head Office (effective ${prettyDate(r.date)}; ${r.fee ?? '?'}% service charge not included)`],
   ];
   for (const [slug, url, opt, src] of api) {
-    try { const r = await readPublicApi(url, opt); out.quotes[slug] = { rates: r.rates, source: src(r), updatedAt: NOW.iso }; note(slug, true, Object.keys(r.rates).join(' ')); }
+    try { const r = await readPublicApi(url, opt); out.quotes[slug] = { rates: r.rates, source: src(r) + stale(r.date), updatedAt: NOW.iso }; note(slug, true, Object.keys(r.rates).join(' ') + stale(r.date)); }
     catch (e) { note(slug, false, e.message); }
   }
 
@@ -154,7 +164,7 @@ async function read() {
   const browser = await chromium.launch();
   try {
     for (const [slug, fn] of [['dbh', readDbh], ['taypay', readTaypay], ['haron', readHaron], ['ammann', readAmmann]]) {
-      try { const r = await fn(browser); out.quotes[slug] = { rates: r.rates, source: r.source, updatedAt: r.updatedAt || NOW.iso }; note(slug, true, Object.keys(r.rates).join(' ')); }
+      try { const r = await fn(browser); out.quotes[slug] = { rates: r.rates, source: r.source + stale(r.date), updatedAt: r.updatedAt || NOW.iso }; note(slug, true, Object.keys(r.rates).join(' ') + stale(r.date)); }
       catch (e) { note(slug, false, e.message); }
     }
   } finally { await browser.close(); }
@@ -170,16 +180,21 @@ function merge(readings, skip) {
   const day = existing ? structuredClone(existing) : { date: readings.date, nbe: {}, nbeSource: '', quotes: {} };
   day.nbe = day.nbe || {}; day.quotes = day.quotes || {};
 
-  if (readings.nbe) {
+  const nbeDate = readings.nbeDate || readings.date;
+  const nbeStale = nbeDate !== readings.date;
+  const hadFreshNbe = Object.keys(day.nbe).length && !/STALE/.test(day.nbeSource || '');
+  if (readings.nbe && !(nbeStale && hadFreshNbe)) {
     Object.assign(day.nbe, readings.nbe);
     day.nbe = Object.fromEntries(Object.keys(day.nbe).sort().map(k => [k, day.nbe[k]]));
-    const mine = `NBE daily indicative rates for ${prettyDate(readings.date)} (weighted average) from api.nbe.gov.et: ${Object.keys(readings.nbe).join(', ')}`;
+    const mine = `${nbeStale ? 'STALE: ' : ''}NBE daily indicative rates for ${prettyDate(nbeDate)} (weighted average) from api.nbe.gov.et: ${Object.keys(readings.nbe).join(', ')}${nbeStale ? ' (NBE had not published a rate for this day when read)' : ''}`;
     if (!day.nbeSource) day.nbeSource = mine;
     else if (!day.nbeSource.includes('api.nbe.gov.et')) day.nbeSource = `${day.nbeSource}; ${mine}`;
   }
 
   for (const [slug, q] of Object.entries(readings.quotes)) {
     if (skip.includes(slug)) { console.log(`Left out ${slug} (asked to skip it).`); continue; }
+    const have = day.quotes[slug];
+    if (/STALE/.test(q.source) && have && !/STALE/.test(have.source)) { console.log(`Kept today's ${slug} quote over an older reading.`); continue; }
     const quote = structuredClone(q);
     const nbeUsd = day.nbe.USD, buy = quote.rates.USD && quote.rates.USD.buy;
     if (nbeUsd && buy && buy < nbeUsd) quote.source += ` (DOUBTFUL: USD buy ${buy} is below the NBE rate ${nbeUsd})`;

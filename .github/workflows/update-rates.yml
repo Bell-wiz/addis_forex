@@ -2,7 +2,7 @@ name: Update forex rates
 
 on:
   schedule:
-    - cron: '15 6 * * 1-5'   # 09:15 Addis Ababa (UTC+3), Monday to Friday
+    - cron: '15 6 * * 1-6'   # 09:15 Addis Ababa (UTC+3), Monday to Saturday
   workflow_dispatch:
     inputs:
       skip:
