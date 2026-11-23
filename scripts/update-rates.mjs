@@ -144,6 +144,27 @@ async function readAmmann(browser) {
   });
 }
 
+// bina.et republishes NBE's full indicative table (the NBE API gives only USD, EUR, AED).
+async function readBinaNbe(browser) {
+  return withPage(browser, 'https://bina.et/exchange-rate-ethiopia', ({ status, text }) => {
+    if (status >= 400) throw new Error(`HTTP ${status}`);
+    const m = text.match(/rates dated\s+\w+,\s+(\d{1,2})\s+(\w+)\s+(\d{4})/i);
+    if (!m) throw new Error('date not found');
+    const mon = ['january','february','march','april','may','june','july','august','september','october','november','december'].indexOf(m[2].toLowerCase()) + 1;
+    if (!mon) throw new Error(`unreadable month ${m[2]}`);
+    const date = `${m[3]}-${String(mon).padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+    if (!usable(date)) throw new Error(`dated ${date}, too old`);
+    const nbe = {};
+    for (const line of text.split('\n')) {
+      const cells = line.split('\t').map(x => x.trim());
+      const code = (cells[0] || '').split(/\s+/)[0];
+      if (cells.length >= 4 && CCYS.includes(code) && !nbe[code]) { const v = num(cells[3]); if (v) nbe[code] = v; }
+    }
+    if (!Object.keys(nbe).length) throw new Error('rate table not found');
+    return { nbe, date };
+  });
+}
+
 async function read() {
   const out = { date: TODAY, readAt: NOW.iso, nbe: null, quotes: {}, log: [] };
   const note = (k, ok, msg) => { out.log.push(`${ok ? 'OK  ' : 'SKIP'} ${k}: ${msg}`); };
@@ -163,6 +184,7 @@ async function read() {
   const { chromium } = await import('playwright');
   const browser = await chromium.launch();
   try {
+    try { const r = await readBinaNbe(browser); out.nbeExtra = r; note('nbe-bina', true, `${Object.keys(r.nbe).join(' ')}${stale(r.date)}`); } catch (e) { note('nbe-bina', false, e.message); }
     for (const [slug, fn] of [['dbh', readDbh], ['taypay', readTaypay], ['haron', readHaron], ['ammann', readAmmann]]) {
       try { const r = await fn(browser); out.quotes[slug] = { rates: r.rates, source: r.source + stale(r.date), updatedAt: r.updatedAt || NOW.iso }; note(slug, true, Object.keys(r.rates).join(' ') + stale(r.date)); }
       catch (e) { note(slug, false, e.message); }
@@ -172,6 +194,53 @@ async function read() {
 }
 
 // ---- merge -------------------------------------------------------------
+
+// Adds NBE currencies the day doesn't have yet; never replaces one already there.
+function fillNbe(day, values, valuesDate, dayDate, from) {
+  if (valuesDate !== dayDate && Object.keys(day.nbe).length && !/STALE/.test(day.nbeSource || '')) return;
+  const added = Object.keys(values).filter(c => CCYS.includes(c) && num(values[c]) && day.nbe[c] === undefined);
+  if (!added.length) return;
+  for (const c of added) day.nbe[c] = num(values[c]);
+  day.nbe = Object.fromEntries(Object.keys(day.nbe).sort().map(k => [k, day.nbe[k]]));
+  const note = `${valuesDate !== dayDate ? 'STALE: ' : ''}${added.join(', ')} for ${prettyDate(valuesDate)} from ${from}`;
+  day.nbeSource = day.nbeSource ? `${day.nbeSource}; ${note}` : note;
+}
+
+function loadDay(date) {
+  const data = JSON.parse(readFileSync('rates.json', 'utf8'));
+  const days = data.days || [];
+  const existing = days.find(d => d.date === date);
+  const day = existing ? structuredClone(existing) : { date, nbe: {}, nbeSource: '', quotes: {} };
+  day.nbe = day.nbe || {}; day.quotes = day.quotes || {};
+  return { data, days, day };
+}
+
+function saveDay({ data, days, day }) {
+  day.quotes = Object.fromEntries(Object.keys(day.quotes).sort().map(k => [k, day.quotes[k]]));
+  if (!Object.keys(day.nbe).length && !Object.keys(day.quotes).length) { console.log('Nothing for this day; rates.json left as it is.'); return; }
+  data.days = [day, ...days.filter(d => d.date !== day.date)].sort((a, b) => b.date.localeCompare(a.date));
+  writeFileSync('rates.json', JSON.stringify(data, null, 1) + '\n');
+}
+
+// extras.json: what the job can't read (Ethio Forex's X card, Ammann), written by
+// Claude. Only these bureaus are taken from it, and it never replaces anything.
+const EXTRA_SLUGS = ['ammann', 'ethio'];
+function mergeExtras(extras) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(extras.date || '')) throw new Error('extras.json has no valid date');
+  const st = loadDay(extras.date);
+  if (extras.nbe) fillNbe(st.day, extras.nbe, extras.date, extras.date, extras.nbeFrom || 'the NBE table');
+  for (const [slug, q] of Object.entries(extras.quotes || {})) {
+    if (!EXTRA_SLUGS.includes(slug)) { console.log(`Ignored ${slug}: not one of ${EXTRA_SLUGS.join(', ')}.`); continue; }
+    const rates = rateMap(Object.entries(q.rates || {}).map(([code, r]) => ({ code, buy: r.buy, sell: r.sell })));
+    if (!rates || !q.source) { console.log(`Ignored ${slug}: no usable rates or source.`); continue; }
+    const quote = { rates, source: String(q.source).slice(0, 200), updatedAt: q.updatedAt || `${extras.date}T00:00:00+03:00` };
+    const nbeUsd = st.day.nbe.USD, buy = rates.USD && rates.USD.buy;
+    if (nbeUsd && buy && buy < nbeUsd) quote.source += ` (DOUBTFUL: USD buy ${buy} is below the NBE rate ${nbeUsd})`;
+    st.day.quotes[slug] = quote;
+    console.log(`Added ${slug} for ${extras.date}.`);
+  }
+  saveDay(st);
+}
 
 function merge(readings, skip) {
   const data = JSON.parse(readFileSync('rates.json', 'utf8'));
@@ -190,6 +259,7 @@ function merge(readings, skip) {
     if (!day.nbeSource) day.nbeSource = mine;
     else if (!day.nbeSource.includes('api.nbe.gov.et')) day.nbeSource = `${day.nbeSource}; ${mine}`;
   }
+  if (readings.nbeExtra) fillNbe(day, readings.nbeExtra.nbe, readings.nbeExtra.date, readings.date, "bina.et's copy of the NBE table");
 
   for (const [slug, q] of Object.entries(readings.quotes)) {
     if (skip.includes(slug)) { console.log(`Left out ${slug} (asked to skip it).`); continue; }
@@ -216,7 +286,13 @@ if (cmd === 'read') {
 } else if (cmd === 'merge') {
   const skip = (process.env.SKIP || '').split(',').map(s => s.trim()).filter(Boolean);
   merge(JSON.parse(readFileSync(file, 'utf8')), skip);
+} else if (cmd === 'extras') {
+  mergeExtras(JSON.parse(readFileSync(file, 'utf8')));
+} else if (cmd === 'done-today') {
+  // exit 0 when today's entry already has the job's own NBE read
+  const d = (JSON.parse(readFileSync('rates.json', 'utf8')).days || []).find(x => x.date === TODAY);
+  process.exit(d && /api\.nbe\.gov\.et/.test(d.nbeSource || '') ? 0 : 1);
 } else {
-  console.error('usage: update-rates.mjs read | merge <readings.json>');
+  console.error('usage: update-rates.mjs read | merge <readings.json> | extras <extras.json> | done-today');
   process.exit(2);
 }

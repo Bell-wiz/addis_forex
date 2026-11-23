@@ -2,7 +2,15 @@ name: Update forex rates
 
 on:
   schedule:
-    - cron: '15 6 * * 1-6'   # 09:15 Addis Ababa (UTC+3), Monday to Saturday
+    # 09:15 Addis Ababa (UTC+3), Monday to Saturday. GitHub sometimes skips or
+    # delays scheduled runs, so two later runs (10:05 and 11:35) only act when
+    # today's rates are still missing.
+    - cron: '15 6 * * 1-6'
+    - cron: '5 7 * * 1-6'
+    - cron: '35 8 * * 1-6'
+  push:
+    branches: [main]
+    paths: [extras.json]
   workflow_dispatch:
     inputs:
       skip:
@@ -26,23 +34,43 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install the browser used for three sites
+      - name: Decide what to do
+        id: plan
+        run: |
+          mode=read
+          if [ "${{ github.event_name }}" = "push" ]; then mode=extras; fi
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "15 6 * * 1-6" ] && node scripts/update-rates.mjs done-today; then
+            echo "Today's rates are already in; nothing to do."; mode=none
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+      - name: Install the browser used for some sites
+        if: steps.plan.outputs.mode == 'read'
         run: npm i --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
       - name: Read the NBE rate and the bureaus
+        if: steps.plan.outputs.mode == 'read'
         run: node scripts/update-rates.mjs read > "$RUNNER_TEMP/readings.json"
       - name: Merge into rates.json and push
+        if: steps.plan.outputs.mode != 'none'
         env:
           SKIP: ${{ github.event.inputs.skip }}
+          MODE: ${{ steps.plan.outputs.mode }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           for attempt in 1 2 3; do
             git fetch -q origin main
             git reset -q --hard origin/main
-            node scripts/update-rates.mjs merge "$RUNNER_TEMP/readings.json"
+            if [ "$MODE" = read ]; then
+              node scripts/update-rates.mjs merge "$RUNNER_TEMP/readings.json"
+              msg="Rates for $(jq -r .date "$RUNNER_TEMP/readings.json") (automatic)"
+            else
+              msg="Extras for $(jq -r .date extras.json) (Ethio Forex, Ammann, NBE)"
+            fi
+            # extras.json for the same day is applied after every read, so order doesn't matter
+            if [ -f extras.json ]; then node scripts/update-rates.mjs extras extras.json; fi
             if git diff --quiet -- rates.json; then echo "rates.json unchanged"; exit 0; fi
             git add rates.json
-            git commit -q -m "Rates for $(jq -r .date "$RUNNER_TEMP/readings.json") (automatic)"
+            git commit -q -m "$msg"
             if git push -q origin HEAD:main; then git log -1 --stat; exit 0; fi
             echo "Push lost a race, trying again"; sleep 10
           done
