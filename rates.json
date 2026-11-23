@@ -1,6 +1,237 @@
 {
  "days": [
   {
+   "date": "2026-11-23",
+   "nbe": {
+    "AED": 44.1517,
+    "EUR": 178.0521,
+    "USD": 161.3536
+   },
+   "nbeSource": "NBE daily indicative rates for 23 Nov (weighted average) from api.nbe.gov.et: USD, EUR, AED",
+   "quotes": {
+    "dbh": {
+     "rates": {
+      "AED": {
+       "buy": 49.1611,
+       "sell": 50.1443
+      },
+      "CAD": {
+       "buy": 122.1201,
+       "sell": 124.5625
+      },
+      "CHF": {
+       "buy": 214.7501,
+       "sell": 219.0451
+      },
+      "CNY": {
+       "buy": 26.0501,
+       "sell": 26.5711
+      },
+      "EUR": {
+       "buy": 200.1525,
+       "sell": 204.1556
+      },
+      "GBP": {
+       "buy": 231.6101,
+       "sell": 236.2423
+      },
+      "SAR": {
+       "buy": 47.6311,
+       "sell": 48.5837
+      },
+      "USD": {
+       "buy": 180.3511,
+       "sell": 183.9581
+      }
+     },
+     "source": "dbhforex.com, Main branch (site: last updated 23 Nov)",
+     "updatedAt": "2026-11-23T10:09:00+03:00"
+    },
+    "global": {
+     "rates": {
+      "AED": {
+       "buy": 49.25,
+       "sell": 50.235
+      },
+      "CAD": {
+       "buy": 123.5,
+       "sell": 125.97
+      },
+      "CHF": {
+       "buy": 212,
+       "sell": 216.24
+      },
+      "CNY": {
+       "buy": 26,
+       "sell": 26.52
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.74
+      },
+      "SAR": {
+       "buy": 48,
+       "sell": 48.96
+      },
+      "USD": {
+       "buy": 182,
+       "sell": 185.64
+      }
+     },
+     "source": "globalforexet.com (applicable 23 Nov; selling excl. 2% fee + VAT)",
+     "updatedAt": "2026-11-23T10:09:00+03:00"
+    },
+    "haron": {
+     "rates": {
+      "AED": {
+       "buy": 49.5,
+       "sell": 50.49
+      },
+      "CAD": {
+       "buy": 124,
+       "sell": 126.48
+      },
+      "CHF": {
+       "buy": 216,
+       "sell": 220.32
+      },
+      "CNY": {
+       "buy": 26,
+       "sell": 26.52
+      },
+      "EUR": {
+       "buy": 197.75,
+       "sell": 201.705
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.74
+      },
+      "SAR": {
+       "buy": 47.5,
+       "sell": 48.45
+      },
+      "USD": {
+       "buy": 182,
+       "sell": 185.64
+      }
+     },
+     "source": "haronforex.com (last updated 23 Nov 09:25)",
+     "updatedAt": "2026-11-23T09:25:47+03:00"
+    },
+    "rooha": {
+     "rates": {
+      "AED": {
+       "buy": 49.33,
+       "sell": 50.3166
+      },
+      "CAD": {
+       "buy": 124.32,
+       "sell": 126.8064
+      },
+      "CHF": {
+       "buy": 212.55,
+       "sell": 216.801
+      },
+      "CNY": {
+       "buy": 26.33,
+       "sell": 26.8566
+      },
+      "EUR": {
+       "buy": 199.37,
+       "sell": 203.3574
+      },
+      "GBP": {
+       "buy": 237.65,
+       "sell": 242.403
+      },
+      "SAR": {
+       "buy": 48.15,
+       "sell": 49.113
+      },
+      "USD": {
+       "buy": 182.01,
+       "sell": 185.6502
+      }
+     },
+     "source": "roohaforex.net (applicable 23 Nov; selling excl. 0.5% fee)",
+     "updatedAt": "2026-11-23T10:09:00+03:00"
+    },
+    "taypay": {
+     "rates": {
+      "AED": {
+       "buy": 48.9999,
+       "sell": 49.9799
+      },
+      "CHF": {
+       "buy": 216.9999,
+       "sell": 221.3399
+      },
+      "CNY": {
+       "buy": 25.9999,
+       "sell": 26.5199
+      },
+      "EUR": {
+       "buy": 198.9999,
+       "sell": 202.9799
+      },
+      "GBP": {
+       "buy": 234.9999,
+       "sell": 239.6999
+      },
+      "SAR": {
+       "buy": 46.9999,
+       "sell": 47.9399
+      },
+      "USD": {
+       "buy": 180.9998,
+       "sell": 184.6198
+      }
+     },
+     "source": "taypayforexbureau.com (undated; read 23 Nov)",
+     "updatedAt": "2026-11-23T10:09:00+03:00"
+    },
+    "walia": {
+     "rates": {
+      "AED": {
+       "buy": 49,
+       "sell": 49.98
+      },
+      "CAD": {
+       "buy": 124.5,
+       "sell": 126.99
+      },
+      "CHF": {
+       "buy": 214.5,
+       "sell": 218.79
+      },
+      "CNY": {
+       "buy": 27,
+       "sell": 27.54
+      },
+      "EUR": {
+       "buy": 199,
+       "sell": 202.98
+      },
+      "GBP": {
+       "buy": 238,
+       "sell": 242.76
+      },
+      "SAR": {
+       "buy": 48,
+       "sell": 48.96
+      },
+      "USD": {
+       "buy": 182,
+       "sell": 185.64
+      }
+     },
+     "source": "waliaforexet.com, Head Office (effective 23 Nov; 1% service charge not included)",
+     "updatedAt": "2026-11-23T10:09:00+03:00"
+    }
+   }
+  },
+  {
    "date": "2026-11-21",
    "nbe": {
     "AED": 44.1782,
