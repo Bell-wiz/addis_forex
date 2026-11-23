@@ -146,6 +146,10 @@
        "buy": 26,
        "sell": 26.52
       },
+      "EUR": {
+       "buy": 203,
+       "sell": 207.06
+      },
       "GBP": {
        "buy": 237,
        "sell": 241.74
@@ -160,7 +164,7 @@
       }
      },
      "source": "globalforexet.com (applicable 23 Nov; selling excl. 2% fee + VAT)",
-     "updatedAt": "2026-11-23T10:12:00+03:00"
+     "updatedAt": "2026-11-23T20:59:00+03:00"
     },
     "haron": {
      "rates": {
@@ -177,12 +181,12 @@
        "sell": 220.32
       },
       "CNY": {
-       "buy": 26,
-       "sell": 26.52
+       "buy": 26.5,
+       "sell": 27.03
       },
       "EUR": {
-       "buy": 197.75,
-       "sell": 201.705
+       "buy": 198.25,
+       "sell": 202.215
       },
       "GBP": {
        "buy": 237,
@@ -197,8 +201,8 @@
        "sell": 185.64
       }
      },
-     "source": "haronforex.com (last updated 23 Nov 09:25)",
-     "updatedAt": "2026-11-23T09:25:47+03:00"
+     "source": "haronforex.com (last updated 23 Nov 11:22)",
+     "updatedAt": "2026-11-23T11:22:30+03:00"
     },
     "rooha": {
      "rates": {
@@ -236,7 +240,7 @@
       }
      },
      "source": "roohaforex.net (applicable 23 Nov; selling excl. 0.5% fee)",
-     "updatedAt": "2026-11-23T10:12:00+03:00"
+     "updatedAt": "2026-11-23T20:59:00+03:00"
     },
     "taypay": {
      "rates": {
@@ -265,12 +269,12 @@
        "sell": 47.9399
       },
       "USD": {
-       "buy": 180.9998,
-       "sell": 184.6198
+       "buy": 181.9998,
+       "sell": 185.6398
       }
      },
      "source": "taypayforexbureau.com (undated; read 23 Nov)",
-     "updatedAt": "2026-11-23T10:12:00+03:00"
+     "updatedAt": "2026-11-23T20:59:00+03:00"
     },
     "walia": {
      "rates": {
@@ -308,7 +312,7 @@
       }
      },
      "source": "waliaforexet.com, Head Office (effective 23 Nov; 1% service charge not included)",
-     "updatedAt": "2026-11-23T10:12:00+03:00"
+     "updatedAt": "2026-11-23T20:59:00+03:00"
     }
    }
   },
