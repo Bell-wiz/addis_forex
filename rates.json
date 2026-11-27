@@ -55,8 +55,8 @@
     "dbh": {
      "rates": {
       "AED": {
-       "buy": 49.1611,
-       "sell": 50.1443
+       "buy": 49.3711,
+       "sell": 50.3585
       },
       "CAD": {
        "buy": 122.1201,
@@ -83,12 +83,12 @@
        "sell": 48.5837
       },
       "USD": {
-       "buy": 182.3417,
-       "sell": 185.9885
+       "buy": 182.3411,
+       "sell": 185.9879
       }
      },
      "source": "dbhforex.com, Main branch (site: last updated 27 Nov)",
-     "updatedAt": "2026-11-27T11:35:00+03:00"
+     "updatedAt": "2026-11-27T19:34:00+03:00"
     },
     "ethio": {
      "rates": {
@@ -160,7 +160,7 @@
       }
      },
      "source": "globalforexet.com (applicable 27 Nov; selling excl. 2% fee + VAT)",
-     "updatedAt": "2026-11-27T11:35:00+03:00"
+     "updatedAt": "2026-11-27T19:34:00+03:00"
     },
     "haron": {
      "rates": {
@@ -236,7 +236,7 @@
       }
      },
      "source": "roohaforex.net (applicable 27 Nov; selling excl. 0.5% fee)",
-     "updatedAt": "2026-11-27T11:35:00+03:00"
+     "updatedAt": "2026-11-27T19:34:00+03:00"
     },
     "taypay": {
      "rates": {
@@ -270,7 +270,7 @@
       }
      },
      "source": "taypayforexbureau.com (undated; read 27 Nov)",
-     "updatedAt": "2026-11-27T11:35:00+03:00"
+     "updatedAt": "2026-11-27T19:34:00+03:00"
     },
     "walia": {
      "rates": {
@@ -308,7 +308,7 @@
       }
      },
      "source": "waliaforexet.com, Head Office (effective 27 Nov; 1.4% service charge not included)",
-     "updatedAt": "2026-11-27T11:35:00+03:00"
+     "updatedAt": "2026-11-27T19:34:00+03:00"
     }
    }
   },
