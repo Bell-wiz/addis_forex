@@ -1,6 +1,91 @@
 {
  "days": [
   {
+   "date": "2026-11-27",
+   "nbe": {
+    "USD": 161.4546
+   },
+   "nbeSource": "USD for 27 Nov from NBE indicative rate via bina.et",
+   "quotes": {
+    "ammann": {
+     "rates": {
+      "AED": {
+       "buy": 49.2,
+       "sell": 50.184
+      },
+      "CAD": {
+       "buy": 124,
+       "sell": 126.48
+      },
+      "CHF": {
+       "buy": 214,
+       "sell": 218.28
+      },
+      "CNY": {
+       "buy": 26,
+       "sell": 26.52
+      },
+      "EUR": {
+       "buy": 198,
+       "sell": 201.96
+      },
+      "GBP": {
+       "buy": 237,
+       "sell": 241.74
+      },
+      "SAR": {
+       "buy": 48,
+       "sell": 48.96
+      },
+      "USD": {
+       "buy": 182,
+       "sell": 185.64
+      }
+     },
+     "source": "ammannforexbureau.com, Beherawi branch (rates effective 27 Nov)",
+     "updatedAt": "2026-11-27T09:55:00+03:00"
+    },
+    "ethio": {
+     "rates": {
+      "AED": {
+       "buy": 49.2053,
+       "sell": 50.1402
+      },
+      "CAD": {
+       "buy": 124.5,
+       "sell": 126.8655
+      },
+      "CHF": {
+       "buy": 212.0976,
+       "sell": 216.1275
+      },
+      "CNY": {
+       "buy": 26.4897,
+       "sell": 26.993
+      },
+      "EUR": {
+       "buy": 198,
+       "sell": 201.564
+      },
+      "GBP": {
+       "buy": 238,
+       "sell": 242.522
+      },
+      "SAR": {
+       "buy": 48.0675,
+       "sell": 48.9808
+      },
+      "USD": {
+       "buy": 183,
+       "sell": 186.2025
+      }
+     },
+     "source": "@Ethioforexrate on X (rate card, 27 Nov 6:03 AM)",
+     "updatedAt": "2026-11-27T06:03:00+03:00"
+    }
+   }
+  },
+  {
    "date": "2026-11-26",
    "nbe": {
     "AED": 43.9881,
